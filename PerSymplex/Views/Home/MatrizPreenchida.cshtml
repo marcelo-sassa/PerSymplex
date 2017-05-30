@@ -1,7 +1,7 @@
 ﻿@model PerSymplex.Models.HeaderSimplex
 
 @{
-    ViewBag.Title = "Exibe Matriz";
+    ViewBag.Title = "Tabela Inicial";
 }
 
 @*<style>
@@ -11,7 +11,7 @@
 </style>*@
 
 <table cellpadding="0px" cellspacing="0px" style="border:0px">
-    <caption>Matriz Show</caption>
+    <caption>Tabela Inicial</caption>
         @if (Model != null)
         {
             for (int i = 0; i < Model.Matriz.GetLength(0); i++)
@@ -20,7 +20,7 @@
                     @for (int j = 0; j < Model.Matriz.GetLength(1); j++)
                     {
                         <td>
-                            <input type="text" value="@Model.Matriz[i, j]" size="4px" style="text-align:center"/>
+                            <input type="text" value="@Model.Matriz[i, j]" size="6px" style="text-align:center"/>
                         </td>
                     }
                 </tr>

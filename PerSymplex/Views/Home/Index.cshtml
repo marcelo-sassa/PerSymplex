@@ -1,26 +1,30 @@
 ﻿@model PerSymplex.Models.HeaderSimplex
 
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "PerSymplex";
 }
 
 
 @using (Html.BeginForm())
 {
+    <br />
     <div class="row">
-        @Html.LabelFor(model => model.NVar)
-        @Html.EditorFor(model => model.NVar, new { @class = "form-control" })
-    </div>
-    <div class="row">
-        @Html.LabelFor(model => model.NRest)
-        @Html.EditorFor(model => model.NRest, new { @class = "form-control" })
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.NVar)
+            @Html.EditorFor(model => model.NVar, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.NRest)
+            @Html.EditorFor(model => model.NRest, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
     </div>
     if (Model != null)
     {
         if (Model.NRest > 0 & Model.NRest > 0)
         {
+            <br />
             <div class="row">
-                <table>
+                <table cellpadding="0px" cellspacing="0px" style="border:0px">
                     <caption>Função Objetivo</caption>
                     <tr>
                         @for (int i = 0; i < Model.NVar; i++)
@@ -28,31 +32,32 @@
                             <td>
                                 @if (i == 0)
                                 {
-                                    @("Max Z = ") @Html.EditorFor(model => model.FO[i])
+                                    @("Max Z = ") @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px" } }) @("X" + (i+1))
                                 }
                                 else if (i < Model.NVar)
                                 {
-                                    @(" + ")@Html.EditorFor(model => model.FO[i])
+                                    @(" + ")@Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px" } }) @("X" + (i + 1))
                                 }
                                 else
                                 {
-                                    @Html.EditorFor(model => model.FO[i])
+                                    @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px" } }) @("X" + (i + 1))
                                 }
                             </td>
                         }
                     </tr>
                 </table>
             </div>
+            <br />
             <div class="row">
                 <table cellpadding="0px" cellspacing="0px" style="border:0px">
-                    <caption>Matrix A</caption>
+                    <caption>Restrições</caption>
                     @for (int i = 0; i < Model.NRest; i++)
                     {
                         <tr>
                             @for (int j = 0; j < (Model.NVar + 1); j++)
                             {
                                 <td style="padding:0px;border:0px">
-                                    @Html.TextBox("MatrixA" + i, null, new { style = "width:40px", maxlength = "4" })
+                                    @Html.TextBox("MatrixA" + i, null, new { style = "width:60px"})
                                 </td>
                                 if (j < Model.NVar - 1)
                                 {
@@ -111,7 +116,8 @@
             </table>
         </td>*@
     <div>
-        <input type="submit" />
+        <br />
+        <input class="btn btn-primary" type="submit" />
     </div>
 }
 

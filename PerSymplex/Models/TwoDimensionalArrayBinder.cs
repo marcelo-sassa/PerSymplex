@@ -8,6 +8,9 @@ using System.Web.Mvc;
 
 namespace PerSymplex.Models
 {
+    //Credits for this class to: Imran Baloch - Microsoft MVP
+    //Found in https://weblogs.asp.net/imranbaloch/model-binder-for-two-dimensional-array
+    //Thank you for sharing your knowledge and saving minds near to explode
     public class TwoDimensionalArrayBinder<T> : IModelBinder
 	{
 	    public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
