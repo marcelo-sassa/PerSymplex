@@ -1,0 +1,190 @@
+﻿@model PerSymplex.Models.HeaderSimplex
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        @Html.LabelFor(model => model.NVar)
+        @Html.EditorFor(model => model.NVar, new { @class = "form-control" })
+    </div>
+    <div class="row">
+        @Html.LabelFor(model => model.NRest)
+        @Html.EditorFor(model => model.NRest, new { @class = "form-control" })
+    </div>
+    if (Model != null)
+    {
+        if (Model.NRest > 0 & Model.NRest > 0)
+        {
+            <div class="row">
+                <table>
+                    <caption>Função Objetivo</caption>
+                    <tr>
+                        @for (int i = 0; i < Model.NVar; i++)
+                        {
+                            <td>
+                                @if (i == 0)
+                                {
+                                    @("Max Z = ") @Html.EditorFor(model => model.FO[i])
+                                }
+                                else if (i < Model.NVar)
+                                {
+                                    @(" + ")@Html.EditorFor(model => model.FO[i])
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(model => model.FO[i])
+                                }
+                            </td>
+                        }
+                    </tr>
+                </table>
+            </div>
+            <div class="row">
+                <table cellpadding="0px" cellspacing="0px" style="border:0px">
+                    <caption>Matrix A</caption>
+                    @for (int i = 0; i < Model.NRest; i++)
+                    {
+                        <tr>
+                            @for (int j = 0; j < (Model.NVar + 1); j++)
+                            {
+                                <td style="padding:0px;border:0px">
+                                    @Html.TextBox("MatrixA" + i, null, new { style = "width:40px", maxlength = "4" })
+                                </td>
+                                if (j < Model.NVar - 1)
+                                {
+                                    <td>
+                                        @("X" + (j + 1) + " + ")
+                                    </td>
+                                }
+                                else if (j == Model.NVar - 1)
+                                {
+                                    <td>
+                                        @("X" + (j + 1) + " <= ")
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        }
+    }
+
+        @*<td style="font-size:20px;font-weight:bold;">
+            X
+        </td>
+        <td>
+            <table cellpadding="0px" cellspacing="0px" style="border:0px">
+                <caption>Matrix B</caption>
+                @for (int i = 0; i < 3; i++)
+                {
+                <tr>
+                    @for (int j = 0; j < 3; j++)
+                    {
+                    <td style="padding:0px;border:0px">
+                        Html.TextBox("MatrixB" + i, null, new {style="width:40px",maxlength="4" })
+                    </td>
+                    }
+                </tr>
+                } 
+            </table>
+        </td>
+        <td>
+            <table cellpadding="0px" cellspacing="0px" style="border:0px">
+                <caption>Comments</caption>
+                @for (int i = 0; i < 3; i++)
+                {
+                <tr>
+                    @for (int j = 0; j < 3; j++)
+                    {
+                    <td style="padding:0px;border:0px">
+                        Html.TextBox("Comments" + i, null, new {style="width:100px" })
+                    </td>
+                    }
+                </tr>
+                }
+            </table>
+        </td>*@
+    <div>
+        <input type="submit" />
+    </div>
+}
+
+@*@using (@Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.NVar)
+                @Html.EditorFor(model => model.NVar, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.NRest)
+                @Html.EditorFor(model => model.NRest, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Confirmar" class="btn btn-default" />
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-responsive">
+            <tbody>
+                @if (Model != null)
+                {
+                    for (int i = 0; i < Model.Matriz.GetLength(0); i++)
+                    {
+                        <tr>
+                            @for (int j = 0; j < Model.Matriz.GetLength(1); j++)
+                            {
+                                <td>
+                                    @Html.EditorFor(model => model.Matriz[i, j], new { @class="form-control"})
+                                   
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}*@
+
+
+
+
+
+@*<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>*@
