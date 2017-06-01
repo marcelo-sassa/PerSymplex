@@ -18,5 +18,8 @@ namespace PerSymplex.Models
 
         [DisplayName("Função Objetivo")]
         public string[] FO { get; set; }
+
+        [DisplayName("Titulo da Tabela")]
+        public string Titulo { get; set; }
     }
 }

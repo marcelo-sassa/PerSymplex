@@ -177,7 +177,7 @@
     <Content Include="Views\Home\MatrizPreenchida.cshtml" />
     <Content Include="Views\Home\TesteIndex.cshtml" />
     <Content Include="Views\Simplex\Index.cshtml" />
-    <Content Include="Views\Simplex\TabelaInicial.cshtml" />
+    <Content Include="Views\Simplex\Resultado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
