@@ -110,23 +110,20 @@ namespace PerSymplex.Controllers
                 }
             }
 
-            if (MatrixA != null)
-            {
-                HeaderSimplex ModelTopZera = new HeaderSimplex();
-                ModelTopZera = Model;
-                while (!CondicaoDeParada(ModelTopZera.Matriz))
-                {
-                    ModelTopZera.Matriz = SolveSimplex(Model);
-                }
-            }
-
             if(MatrixA == null)
             {
                 return View(Model);
             }
             else
             {
-                return View("TabelaInicial",Model);
+                HeaderSimplex ModelTopZera = new HeaderSimplex();
+                ModelTopZera = Model;
+                while (!CondicaoDeParada(ModelTopZera.Matriz))
+                {
+                    ModelTopZera.Matriz = SolveSimplex(ModelTopZera);
+                }
+
+                return View("TabelaInicial", ModelTopZera);
             }
         }
 
@@ -156,8 +153,8 @@ namespace PerSymplex.Controllers
                     continue;
 
                 for (int j = 1; j < Model.Matriz.GetLength(1); j++)
-                    NovaTabela[i, j] = (decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Model.Matriz[i, PCol]) * (-1)) + decimal.Parse(Model.Matriz[i,j])).ToString();
-                //NovaTabela[i, j] = Model.Matriz[i, j] - Model.Matriz[i, PCol] * NovaTabela[PLin, j];
+                    //NovaTabela[i, j] = (decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Model.Matriz[i, PCol]) * (-1)) + decimal.Parse(Model.Matriz[i,j])).ToString();
+                NovaTabela[i, j] = (decimal.Parse(Model.Matriz[i, j]) - (decimal.Parse(Model.Matriz[i, PCol]) * decimal.Parse(NovaTabela[PLin, j]))).ToString();
             }
             //table = NovaTabela;
 
@@ -211,10 +208,13 @@ namespace PerSymplex.Controllers
                     break;
                 }
 
-            for (int i = PLin + 1; i < (Tabela.GetLength(0) - 1) - 1; i++)
+            for (int i = PLin + 1; i < (Tabela.GetLength(0) - 1); i++)
+            {
                 if ((decimal.Parse(Tabela[i, PCol]) > 0))
-                    if(((decimal.Parse(Tabela[i, (Tabela.GetLength(1) - 1)]) / decimal.Parse(Tabela[i, PCol])) < (decimal.Parse(Tabela[PLin, (Tabela.GetLength(1) - 1)]) / decimal.Parse(Tabela[PLin, PCol]))))
+                    if (((decimal.Parse(Tabela[i, (Tabela.GetLength(1) - 1)]) / decimal.Parse(Tabela[i, PCol])) < (decimal.Parse(Tabela[PLin, (Tabela.GetLength(1) - 1)]) / decimal.Parse(Tabela[PLin, PCol]))))
                         PLin = i;
+            }
+                
 
             return PLin;
         }
