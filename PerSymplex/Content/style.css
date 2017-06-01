@@ -1,0 +1,25 @@
+.membro img{
+	width: 200px;
+}
+section h1{
+	margin-bottom: 60px;
+}
+.facebook{
+	background: blue;
+}
+.linkedin{
+	background: gray;
+}
+.gmail{
+	background: red;
+}
+.get-started{
+	margin: 60px;
+}
+footer{
+	background: #000;
+	color: #fff;
+	width: 100%;
+	margin: 0;
+	padding: 20px;
+}
