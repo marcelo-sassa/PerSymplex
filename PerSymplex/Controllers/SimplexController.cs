@@ -26,10 +26,24 @@ namespace PerSymplex.Controllers
 
             List<HeaderSimplex> ListaTabelas = new List<HeaderSimplex>();
 
+            bool Minimizacao = false;
+
             try
             {
                 if (MatrixA != null)
                 {
+                    if(Model.Operacao == Operacao.Minimizar)
+                    {
+                        Minimizacao = true;
+                        for(int i = 0; i < Model.FO.GetLength(0); i++)
+                        {
+                            if (string.IsNullOrEmpty(Model.FO[i]))
+                                Model.FO[i] = "0";
+                            else
+                                Model.FO[i] = (decimal.Parse(Model.FO[i]) * (-1)).ToString();
+                        }
+                    }
+
                     if (Model.Matriz == null)
                     {
                         Model.Matriz = new string[(Model.NRest + 2), (Model.NRest + Model.NVar + 2)];
@@ -121,19 +135,36 @@ namespace PerSymplex.Controllers
                 else
                 {
                     Model.Titulo = "Tabela Inicial";
-                    int contador = 1;
+                    //int PCol = findPCol(Model.Matriz);
+                    //bool SolLimitada = false;
+                    //for (int i = 1; i < Model.Matriz.GetLength(0); i++)
+                    //    if (decimal.Parse(Model.Matriz[i, PCol]) > 0)
+                    //        SolLimitada = true;
+
+                    //if (SolLimitada)
+                    //{
+                    //    int PLin = findPLin(Model.Matriz, PCol);
+                    //}
+                    //else
+                    //{
+                    //    throw new Exception("Não foi possível resolver pois a solução é ilimitada!");
+                    //}
+
                     ListaTabelas.Add(Model);
 
                     //HeaderSimplex ModelTopZera = new HeaderSimplex();
                     //ModelTopZera = Model;
+                    int contador = 1;
                     string[,] Tabela = Model.Matriz;
 
                     while (!CondicaoDeParada(Tabela) & contador <= 20)
                     {
-                        Tabela = SolveSimplex(Tabela);
+                        //Tabela = SolveSimplex(Tabela);
 
-                        HeaderSimplex NovoModelo = new HeaderSimplex();
-                        NovoModelo.Matriz = Tabela;
+                        HeaderSimplex NovoModelo = SolveSimplex(Tabela, Minimizacao);
+                        Tabela = NovoModelo.Matriz;
+
+                        //NovoModelo.Matriz = Tabela;
                         NovoModelo.Titulo = contador + "ª Iteração";
 
                         //DEFINIR LIMITE DE ITERAÇÕES
@@ -157,32 +188,37 @@ namespace PerSymplex.Controllers
             }
         }
 
-        public string[,] SolveSimplex(string[,] Tabela)
+        public HeaderSimplex SolveSimplex(string[,] Tabela, bool Minimizacao)
         {
+            HeaderSimplex ModeloTeporario = new HeaderSimplex();
+
             int PCol, PLin;
             string[,] NovaTabela = new string[Tabela.GetLength(0), Tabela.GetLength(1)];
             
             PCol = findPCol(Tabela);
 
-            bool SolLimitda = false;
+            bool SolLimitada = false;
             for (int i = 1; i < Tabela.GetLength(0); i++)
                 if (decimal.Parse(Tabela[i, PCol]) > 0)
-                    SolLimitda = true;
+                    SolLimitada = true;
 
-            if (SolLimitda)
+            if (SolLimitada)
             {
                 PLin = findPLin(Tabela, PCol);
 
+                //Passa os valores da primeira linha da tabela, para a nova tabela
                 for (int i = 0; i < Tabela.GetLength(0); i++)
                     NovaTabela[i, 0] = Tabela[i, 0];
 
+                //Passa os valores da primeira coluna da tabela, para a nova tabela
                 for (int j = 0; j < Tabela.GetLength(1); j++)
                     NovaTabela[0, j] = Tabela[0, j];
 
+                //Coloca a váriavel que deve entrar na base no seu respectivo lugar
                 NovaTabela[PLin, 0] = Tabela[0, PCol];
 
                 for (int j = 1; j < Tabela.GetLength(1); j++)
-                    NovaTabela[PLin, j] = (decimal.Parse(Tabela[PLin, j]) / decimal.Parse(Tabela[PLin, PCol])).ToString();
+                    NovaTabela[PLin, j] = (Math.Round((decimal.Parse(Tabela[PLin, j]) / decimal.Parse(Tabela[PLin, PCol])),2)).ToString();
 
                 for (int i = 1; i < Tabela.GetLength(0); i++)
                 {
@@ -190,7 +226,7 @@ namespace PerSymplex.Controllers
                         continue;
 
                     for (int j = 1; j < Tabela.GetLength(1); j++)
-                        NovaTabela[i, j] = (decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Tabela[i, PCol]) * (-1)) + decimal.Parse(Tabela[i, j])).ToString();
+                        NovaTabela[i, j] = (Math.Round((decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Tabela[i, PCol]) * (-1)) + decimal.Parse(Tabela[i, j])),2)).ToString();
                     //NovaTabela[i, j] = (decimal.Parse(Tabela[i, j]) - (decimal.Parse(Tabela[i, PCol]) * decimal.Parse(NovaTabela[PLin, j]))).ToString();
                 }
                 //table = NovaTabela;
@@ -204,7 +240,20 @@ namespace PerSymplex.Controllers
                 //    else
                 //        result[i] = 0;
                 //}
-                return NovaTabela;
+                ModeloTeporario.Matriz = NovaTabela;
+
+                string[] Solucao = new string[(NovaTabela.GetLength(0)-1)];
+                if(Minimizacao)
+                    Solucao[0] = NovaTabela[(NovaTabela.GetLength(0) - 1), 0] + " = " + (decimal.Parse(NovaTabela[(NovaTabela.GetLength(0) - 1), (NovaTabela.GetLength(1) - 1)]) * (-1));
+                else
+                    Solucao[0] = NovaTabela[(NovaTabela.GetLength(0) - 1), 0] + " = " + NovaTabela[(NovaTabela.GetLength(0) - 1), (NovaTabela.GetLength(1) - 1)];
+
+                for (int i = 1; i < (NovaTabela.GetLength(0) - 1); i++)
+                    Solucao[i] = NovaTabela[i,0] + " = " + NovaTabela[i, (NovaTabela.GetLength(1) - 1)];
+
+                ModeloTeporario.Solução = Solucao;
+
+                return ModeloTeporario;
             }
             else
             {
@@ -257,7 +306,6 @@ namespace PerSymplex.Controllers
                         PLin = i;
             }
                 
-
             return PLin;
         }
 

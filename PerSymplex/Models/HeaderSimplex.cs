@@ -10,6 +10,7 @@ namespace PerSymplex.Models
     {
         [DisplayName("Nº de Variáveis")]
         public int NVar { get; set; }
+
         [DisplayName("Nº de Restrições")]
         public int NRest { get; set; }
 
@@ -21,5 +22,29 @@ namespace PerSymplex.Models
 
         [DisplayName("Titulo da Tabela")]
         public string Titulo { get; set; }
+
+        [DisplayName("Objetivo da função")]
+        public Operacao Operacao { get; set; }
+
+        [DisplayName("Váriável que entra na base")]
+        public string VarEntra { get; set; }
+
+        [DisplayName("Váriável que sai da base")]
+        public string VarSai { get; set; }
+
+        [DisplayName("Pivô")]
+        public string[] CalcLinhaPivo { get; set; }
+
+        [DisplayName("Cálculos")]
+        public string[] Calculos { get; set; }
+
+        [DisplayName("Solução")]
+        public string[] Solução { get; set; }
+    }
+
+    public enum Operacao
+    {
+        Maximizar,
+        Minimizar
     }
 }
