@@ -5,7 +5,7 @@
 }
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index","Simplex",FormMethod.Post))
 {
     <br />
     <div class="row">
@@ -87,6 +87,6 @@
     }
     <div>
         <br />
-        <input class="btn btn-primary" type="submit" />
+        <input class="btn btn-primary" type="submit" value="Confirmar"/>
     </div>
 }

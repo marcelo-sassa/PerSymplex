@@ -10,9 +10,18 @@ namespace PerSymplex.Controllers
     public class SimplexController : Controller
     {
         // GET: Simplex
+        //[HttpGet]
+        //public ActionResult Index()
+        //{
+        //    ViewData["RenderPage"] = "Index";
+        //    return View();
+        //}
+
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult TesteIndex()
         {
+            ViewData["PosicionaPagina"] = false;
+            ViewData["RenderPage"] = "Index";
             return View();
         }
 
@@ -130,7 +139,10 @@ namespace PerSymplex.Controllers
 
                 if (MatrixA == null)
                 {
-                    return View(Model);
+                    ViewData["PosicionaPagina"] = true;
+                    ViewData["RenderPage"] = "Index";
+                    //return View((Url.Content("TesteIndex") + "#simplex"),Model);
+                    return View("TesteIndex",Model);
                 }
                 else
                 {
@@ -177,14 +189,17 @@ namespace PerSymplex.Controllers
                     {
                         throw new Exception("Limite de iterações excedido!");
                     }
-
-                    return View("Resultado", ListaTabelas);
+                    ViewData["PosicionaPagina"] = true;
+                    ViewData["RenderPage"] = "Resultado";
+                    return View("TesteIndex", ListaTabelas);
                 }
             }
             catch (Exception ex)
             {
+                ViewData["PosicionaPagina"] = true;
+                ViewData["RenderPage"] = "Erro";
                 ViewData["Exception"] = ex.Message;
-                return View("Erro");
+                return View("TesteIndex");
             }
         }
 
@@ -307,12 +322,6 @@ namespace PerSymplex.Controllers
             }
                 
             return PLin;
-        }
-
-        [HttpGet]
-        public ActionResult TesteIndex()
-        {
-            return View();
         }
     }
 }

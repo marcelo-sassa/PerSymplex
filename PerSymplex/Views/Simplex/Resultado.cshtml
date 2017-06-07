@@ -6,20 +6,20 @@
 @{
     int contador = 0;
 }
-@foreach (var tabela in Model)
+@if (Model != null)
 {
-    contador++;
-    <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
-        <thead>
-            <tr>
-                <th colspan="@tabela.Matriz.GetLength(1)">
-                    @tabela.Titulo
-                </th>
-            </tr>
-        </thead>
-        @if (Model != null)
-        {
-            for (int i = 0; i < tabela.Matriz.GetLength(0); i++)
+    foreach (var tabela in Model)
+    {
+        contador++;
+        <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
+            <thead>
+                <tr>
+                    <th colspan="@tabela.Matriz.GetLength(1)">
+                        @tabela.Titulo
+                    </th>
+                </tr>
+            </thead>
+            @for (int i = 0; i < tabela.Matriz.GetLength(0); i++)
             {
                 <tr>
                     @for (int j = 0; j < tabela.Matriz.GetLength(1); j++)
@@ -31,32 +31,31 @@
                     }
                 </tr>
             }
-        }
-        <tr>
-        </tr>
+            <tr>
+            </tr>
         
-    </table>
-    <br />
-    if (tabela.Solução != null)
-    {
-        if (contador == Model.Count())
+        </table>
+        <br />
+        if (tabela.Solução != null)
         {
-            @Html.Label("Solução Ótima")
+            if (contador == Model.Count())
+            {
+                @Html.Label("Solução Ótima")
+            }
+            else
+            {
+                @Html.Label("Solução Parcial")
+            }
+            for (int i = 0; i < tabela.Solução.GetLength(0); i++)
+            {
+                <div class="row">
+                    @tabela.Solução[i]
+                </div>
+            }
         }
-        else
-        {
-            @Html.Label("Solução Parcial")
-        }
-        for (int i = 0; i < tabela.Solução.GetLength(0); i++)
-        {
-            <div class="row">
-                @tabela.Solução[i]
-            </div>
-        }
+        <br />
     }
-    <br />
-    <hr />
-    <br />
+    @Html.ActionLink("Novo Cálculo","TesteIndex","Simplex",  new { @class = "btn btn-primary" } )
 }
 @*<div class="row">
     @Html.ActionLink("Calcular Solução","SolveSimplex","Simplex")
