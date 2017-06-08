@@ -10,12 +10,12 @@ namespace PerSymplex.Controllers
     public class SimplexController : Controller
     {
         // GET: Simplex
-        //[HttpGet]
-        //public ActionResult Index()
-        //{
-        //    ViewData["RenderPage"] = "Index";
-        //    return View();
-        //}
+        [HttpGet]
+        public ActionResult Index()
+        {
+            ViewData["RenderPage"] = "Index";
+            return View();
+        }
 
         [HttpGet]
         public ActionResult TesteIndex()

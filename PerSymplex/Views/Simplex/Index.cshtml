@@ -11,11 +11,11 @@
     <div class="row">
         <div class="col-md-2">
             @Html.LabelFor(model => model.NVar)
-            @Html.EditorFor(model => model.NVar, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.NVar, new { htmlAttributes = new { @class = "form-control", required = "required", type = "number", min = "0" } })
         </div>
         <div class="col-md-2">
             @Html.LabelFor(model => model.NRest)
-            @Html.EditorFor(model => model.NRest, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.NRest, new { htmlAttributes = new { @class = "form-control", required = "required", type = "number", min = "0" } })
         </div>
     </div>
     if (Model != null)
@@ -39,15 +39,15 @@
                             <td>
                                 @if (i == 0)
                                 {
-                                    @("Função: ") @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px" } }) @("X" + (i+1))
+                                    @("Função: ") @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px", required = "required", type = "number"} }) @("X" + (i+1))
                                 }
                                 else if (i < Model.NVar)
                                 {
-                                    @(" + ")@Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px" } }) @("X" + (i + 1))
+                                    @(" + ")@Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px", required = "required", type = "number" } }) @("X" + (i + 1))
                                 }
                                 else
                                 {
-                                    @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px" } }) @("X" + (i + 1))
+                                    @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px", required = "required", type = "number"} }) @("X" + (i + 1))
                                 }
                             </td>
                         }
@@ -64,7 +64,7 @@
                             @for (int j = 0; j < (Model.NVar + 1); j++)
                             {
                                 <td style="padding:0px;border:0px">
-                                    @Html.TextBox("MatrixA" + i, null, new { style = "width:60px"})
+                                    @Html.TextBox("MatrixA" + i, null, new { style = "width:60px", required = "required", type = "number"})
                                 </td>
                                 if (j < Model.NVar - 1)
                                 {
