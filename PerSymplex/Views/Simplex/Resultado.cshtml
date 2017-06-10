@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Tabelas Resultantes";
+    Layout = "~/Views/Simplex/_LayoutSimplex.cshtml";
 }
 @{
     int contador = 0;
@@ -55,7 +56,7 @@
         }
         <br />
     }
-    @Html.ActionLink("Novo Cálculo","TesteIndex","Simplex",  new { @class = "btn btn-primary" } )
+    @Html.ActionLink("Novo Cálculo","Index","Simplex",  new { @class = "btn btn-primary" } )
 }
 @*<div class="row">
     @Html.ActionLink("Calcular Solução","SolveSimplex","Simplex")

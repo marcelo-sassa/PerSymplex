@@ -8,10 +8,10 @@
     @Styles.Render("~/Content/style.css")
     @Styles.Render("~/Content/scrolling-nav.css")
     @Scripts.Render("~/bundles/modernizr")
-    
+
 </head>
 <body>
-    @*<!-- Navigation -->
+    <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header page-scroll">
@@ -37,41 +37,24 @@
                         <a class="page-scroll" href="#persymplex">O Projeto</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#simplex">Simplex</a>
+                        <a class="page-scroll" href="#equipe">Equipe</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#equipe">Equipe</a>
+                        @*<a class="page-scroll" href="#simplex">Simplex</a>*@
+                        @Html.ActionLink("Simplex", "Index", "Simplex")
                     </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
-    </nav>*@
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("PerSymplex", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Simplex", "Index", "Simplex")</li>
-                    <li>@Html.ActionLink("Teste", "TesteIndex", "Home")</li>
-                </ul>
-            </div>
-        </div>
-    </div>*@
+    </nav>
     <div class="container body-content">
         @RenderBody()
         @*<hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>*@
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")

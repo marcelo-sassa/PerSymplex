@@ -181,6 +181,8 @@
     <Content Include="Views\Simplex\Resultado.cshtml" />
     <Content Include="Views\Simplex\Erro.cshtml" />
     <Content Include="Views\Simplex\TesteIndex.cshtml" />
+    <Content Include="Views\Simplex\_LayoutIndex.cshtml" />
+    <Content Include="Views\Simplex\_LayoutSimplex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
