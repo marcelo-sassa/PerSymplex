@@ -1,25 +1,118 @@
-.membro img{
-	width: 200px;
+/*----------GERAL----------*/
+
+body{
+    padding-top: 50px;
+    font-family: 'Raleway', sans-serif;
+    overflow-x: hidden;
+}
+section{
+    margin-bottom: -1px;
 }
 section h1{
 	margin-bottom: 60px;
 }
-.facebook{
-	background: blue;
+section p{
+    font-size: 22px;
 }
-.linkedin{
-	background: gray;
+.container-fluid{
+    padding: 0px;
 }
-.gmail{
-	background: red;
+h1{
+    font-weight: bold;
+}
+
+/*----------MENU----------*/
+.cabecalho{
+    background: #000;
+}
+.logo{
+    font-weight: bold;
+    font-size: 24px;
+}
+.menu a{
+    color: #fff !important;
+}
+.menu li{
+    font-size: 16px;
+}
+
+/*----------INICIO----------*/
+
+#inicio{
+    background: #333;
+    color: #fff;
+}
+.conheca-projeto{
+    margin-top: 50px;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 15px;
+    font-weight: bold;
+    border: 2px solid #ffd203;
+    color: #ffd203;
+}
+.conheca-projeto:hover, .conheca-projeto:focus{
+    color: #333;
+    background: #ffd203;
+    transition: all .1s ease-in-out;
+    -webkit-transition: all .1s ease-in-out;
+    -moz-transition: all .1s ease-in-out;
+    -o-transition: all .1s ease-in-out;
+}
+.george{
+    border: 1px solid #fff;
+    padding: 8px;
+}
+
+/*----------PERSYMPLEX----------*/
+#persymplex{
+    background: #ffd203;
 }
 .get-started{
-	margin: 60px;
+	margin-top: 50px;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 15px;
+    font-weight: bold;
+    border: 2px solid #333;
+    color: #333;
 }
+.get-started:hover, .get-started:focus{
+    color: #ffd203;
+    background: #333;
+     transition: all .1s ease-in-out;
+    -webkit-transition: all .1s ease-in-out;
+    -moz-transition: all .1s ease-in-out;
+    -o-transition: all .1s ease-in-out;
+}
+/*----------EQUIPE----------*/
+
+#equipe{
+    padding-bottom: 100px
+}
+.membro h4{
+    margin-top: 20px;
+}
+.membro .foto{
+	width: 200px;
+}
+.icone{
+    margin: 10px 0px 30px 0px;
+}
+.icone img{
+    max-width: 40px;
+}
+
+/*----------FOOTER----------*/
 footer{
-	background: #000;
+	background: #1a1a1a;
 	color: #fff;
 	width: 100%;
 	margin: 0;
-	padding: 20px;
+	padding: 30px 0px 20px 0px;
+    margin-top: -6px;
 }
+   
+
+
+
