@@ -12,6 +12,7 @@
     foreach (var tabela in Model)
     {
         contador++;
+        //MOSTRA OS CÁLCULOS
         if (tabela.Calculos != null)
         {
             foreach(var calculo in tabela.Calculos)
@@ -34,6 +35,7 @@
                 <br />
             }
         }
+        //MOSTRA AS TABELAS
         <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
             <thead>
                 <tr>
@@ -58,6 +60,7 @@
             </tr>
         </table>
         <br />
+        //MOSTRA A SOLUÇÃO
         if (tabela.Solucao != null)
         {
             if (contador == Model.Count())
@@ -76,6 +79,91 @@
             }
         }
         <br />
+        //MOSTRA A TABELA DE CUSTO REDUZIDO
+        if (tabela.CustoReduzido != null)
+        {
+            <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
+                <thead>
+                    <tr>
+                        <th colspan="@tabela.CustoReduzido.GetLength(1)">
+                            <h4>Análise sobre as variáveis de decisão</h4>
+                        </th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < tabela.CustoReduzido.GetLength(0); i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < tabela.CustoReduzido.GetLength(1); j++)
+                        {
+                            if (string.IsNullOrEmpty(tabela.CustoReduzido[i, j]))
+                            {
+                                <td>
+                                    
+                                </td>
+                            }
+                            else
+                            {
+                                if (i == 0)
+                                {
+                                    <th align="center">
+                                        @tabela.CustoReduzido[i, j]
+                                    </th>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        @tabela.CustoReduzido[i, j]
+                                    </td>
+                                }
+                            }
+                        }
+                    </tr>
+                }
+                <tr></tr>
+            </table>
+        }
+        <br />
+        //MOSTRA A TABELA DE PREÇO SOMBRA
+        if (tabela.PrecoSombra != null)
+        {
+            <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
+                <thead>
+                    <tr>
+                        <th colspan="@tabela.CustoReduzido.GetLength(1)">
+                            <h4>Análise sobre as restrições (variáveis de folga)</h4>
+                        </th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < tabela.PrecoSombra.GetLength(0); i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < tabela.PrecoSombra.GetLength(1); j++)
+                        {
+                            if (string.IsNullOrEmpty(tabela.PrecoSombra[i, j]))
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                if (i == 0)
+                                {
+                                    <th align="center">
+                                        @tabela.PrecoSombra[i, j]
+                                    </th>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        @tabela.PrecoSombra[i, j]
+                                    </td>
+                                }
+                            }
+                        }
+                    </tr>
+                }
+                <tr></tr>
+            </table>
+        }
         <hr />
         <br />
     }

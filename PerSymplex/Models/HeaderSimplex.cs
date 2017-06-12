@@ -22,8 +22,11 @@ namespace PerSymplex.Models
         [DisplayName("Matriz")]
         public string[,] Matriz { get; set; }
 
-        [DisplayName("Função Objetivo")]
+        [DisplayName("Valor na Função Objetivo")]
         public string[] FO { get; set; }
+
+        [DisplayName("Valor das Restrições")]
+        public string[] Restricoes { get; set; }
 
         [DisplayName("Titulo da Tabela")]
         public string Titulo { get; set; }
@@ -42,6 +45,13 @@ namespace PerSymplex.Models
 
         [DisplayName("Solução")]
         public string[] Solucao { get; set; }
+
+        //ANÁLISE DE SENSIBILIDADE
+        [DisplayName("Análise sobre as variáveis de decisão")]
+        public string[,] CustoReduzido { get; set; }
+
+        [DisplayName("Análise sobre as restrições")]
+        public string[,] PrecoSombra { get; set; }
     }
 
     public enum Operacao

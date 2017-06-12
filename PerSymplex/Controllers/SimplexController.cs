@@ -38,8 +38,8 @@ namespace PerSymplex.Controllers
 
             bool Minimizacao = false;
 
-            //try
-            //{
+            try
+            {
                 if (MatrixA != null)
                 {
                     if(Model.Operacao == Operacao.Minimizar)
@@ -54,10 +54,18 @@ namespace PerSymplex.Controllers
                         }
                     }
 
+                    //Insere no array de restricões do modelo o valor limitante de cada restrição
+                    string[] Restricoes = new string[MatrixA.GetLength(0)];
+                    for (int i = 0; i < MatrixA.GetLength(0); i++)
+                        Restricoes[i] = MatrixA[i, (MatrixA.GetLength(1) - 1)];
+                    //Coloca as restricoes no modelo
+                    Model.Restricoes = Restricoes;
+
                     if (Model.Matriz == null)
                     {
                         Model.Matriz = new string[(Model.NRest + 2), (Model.NRest + Model.NVar + 2)];
                     }
+
                     for (int i = 0; i < Model.Matriz.GetLength(0); i++)
                     {
                         for (int j = 0; j < Model.Matriz.GetLength(1); j++)
@@ -164,20 +172,15 @@ namespace PerSymplex.Controllers
                     //}
 
                     ListaTabelas.Add(Model);
-
-                    //HeaderSimplex ModelTopZera = new HeaderSimplex();
-                    //ModelTopZera = Model;
+                
                     int contador = 1;
                     string[,] Tabela = Model.Matriz;
 
                     while (!CondicaoDeParada(Tabela) & contador <= 20)
                     {
-                        //Tabela = SolveSimplex(Tabela);
-
                         HeaderSimplex NovoModelo = SolveSimplex(Tabela, Minimizacao);
                         Tabela = NovoModelo.Matriz;
-
-                        //NovoModelo.Matriz = Tabela;
+                    
                         NovoModelo.Titulo = contador + "ª Iteração";
 
                         //DEFINIR LIMITE DE ITERAÇÕES
@@ -190,18 +193,26 @@ namespace PerSymplex.Controllers
                     {
                         throw new Exception("Limite de iterações excedido!");
                     }
+
+                    if(ListaTabelas.Count > 1)
+                    {
+                        var TabelaFinal = ListaTabelas.Last();
+                        
+                        TabelaFinal.CustoReduzido = MontaTabelaCustoReduzido(TabelaFinal.Matriz, Model.FO, TabelaFinal.Solucao);
+                        TabelaFinal.PrecoSombra = MontaTabelaPrecoSombra(TabelaFinal.Matriz, Model.Restricoes, TabelaFinal.Solucao);
+                    }
                     //ViewData["PosicionaPagina"] = true;
                     //ViewData["RenderPage"] = "Resultado";
                     return View("Resultado", ListaTabelas);
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    //ViewData["PosicionaPagina"] = true;
-            //    //ViewData["RenderPage"] = "Erro";
-            //    ViewData["Exception"] = ex.Message;
-            //    return View("Erro");
-            //}
+            }
+            catch (Exception ex)
+            {
+                //ViewData["PosicionaPagina"] = true;
+                //ViewData["RenderPage"] = "Erro";
+                ViewData["Exception"] = ex.Message;
+                return View("Erro");
+            }
         }
 
         public HeaderSimplex SolveSimplex(string[,] Tabela, bool Minimizacao)
@@ -233,28 +244,44 @@ namespace PerSymplex.Controllers
                 //Coloca a váriavel que deve entrar na base no seu respectivo lugar
                 NovaTabela[PLin, 0] = Tabela[0, PCol];
 
+                //Cria um array de strings para armezenar os cálculos da linha do pivô
                 string[] linhaPivo = new string[Tabela.GetLength(1)];
+                //Insere na primeira linha o "título" daquele bloco de cálculos
                 linhaPivo[0] = "Linha do Pivô (Linha " + PLin + "):";
-                //ModeloTeporario.CalcLinhaPivo[0] = "Linha do Pivô (Linha " +  PLin + "):";
+                //Loop usado para efetuar os cálculos da linha do pivô
                 for (int j = 1; j < Tabela.GetLength(1); j++)
                 {
+                    //Divide as células da linha do pivô pelo próprio pivô
                     NovaTabela[PLin, j] = (Math.Round((decimal.Parse(Tabela[PLin, j]) / decimal.Parse(Tabela[PLin, PCol])), 2)).ToString();
+                    //Insere no array os cálculos feitos com cada célula
                     linhaPivo[j] = Tabela[PLin, j] + " / " + Tabela[PLin, PCol] + " = " + NovaTabela[PLin, j];
                 }
 
+                //Adciona os cálculos ao modelo que vai reunir todos os cálculos
+                //executados para a tabela em questão
                 ModeloTeporario.Calculos.Add(linhaPivo);
+                //Loop usado para efetuar os cálculos das demais linhas da tabela
                 for (int i = 1; i < Tabela.GetLength(0); i++)
                 {
+                    //Não efetua os cálculos se for a linha do pivô
                     if (i == PLin)
                         continue;
+                    //Cria um array de strings para armezenar os cálculos das linhas
                     string[] calculos = new string[Tabela.GetLength(1)];
+                    //Insere na primeira linha o "título" daquele bloco de cálculos
                     calculos[0] = "Linha " + i + ":";
+                    //Loop iterando coluna a coluna das linhas exceto a do pivô para que
+                    //sejam feitos os devidos cálculos para zerar a coluna do pivô
                     for (int j = 1; j < Tabela.GetLength(1); j++)
                     {
+                        //Efetua os cálculos propriamente ditos
                         NovaTabela[i, j] = (Math.Round((decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Tabela[i, PCol]) * (-1)) + decimal.Parse(Tabela[i, j])), 2)).ToString();
+                        //Insere no array os cálculos feitos com cada célula
                         calculos[j] = NovaTabela[PLin, j] + " * ("+ (decimal.Parse(Tabela[i, PCol]) * (-1)) + ") + " + Tabela[i, j] + " = " + NovaTabela[i, j];
                     }
+                    //Insere o array de cálculos no modelo que armazena todos os cálculos
                     ModeloTeporario.Calculos.Add(calculos);
+                    //Padrão de cálculo diferenciado
                     //NovaTabela[i, j] = (decimal.Parse(Tabela[i, j]) - (decimal.Parse(Tabela[i, PCol]) * decimal.Parse(NovaTabela[PLin, j]))).ToString();
                 }
                 //table = NovaTabela;
@@ -268,19 +295,29 @@ namespace PerSymplex.Controllers
                 //    else
                 //        result[i] = 0;
                 //}
-                ModeloTeporario.Matriz = NovaTabela;
 
+                //Insere a nova tabela no modelo
+                ModeloTeporario.Matriz = NovaTabela;
+                
+                //SOLUÇÃO
+                //Cria um array de strings para armazenar cada linha da solução
                 string[] Solucao = new string[(NovaTabela.GetLength(0)-1)];
                 if(Minimizacao)
+                    //No caso de minização multiplica o Z por (-1) antes de armazenar na soluçao
                     Solucao[0] = NovaTabela[(NovaTabela.GetLength(0) - 1), 0] + " = " + (decimal.Parse(NovaTabela[(NovaTabela.GetLength(0) - 1), (NovaTabela.GetLength(1) - 1)]) * (-1));
                 else
+                    //NO caso de maximização armazena o Z da forma que ele é retirado da tabela
                     Solucao[0] = NovaTabela[(NovaTabela.GetLength(0) - 1), 0] + " = " + NovaTabela[(NovaTabela.GetLength(0) - 1), (NovaTabela.GetLength(1) - 1)];
-
+                //Loop usado para obter os resultados das outras váriaveis que estão base exceto Z
                 for (int i = 1; i < (NovaTabela.GetLength(0) - 1); i++)
                     Solucao[i] = NovaTabela[i,0] + " = " + NovaTabela[i, (NovaTabela.GetLength(1) - 1)];
 
+                //Finalmente coloca no modelo o array com todas aslinhas que compões a solução
                 ModeloTeporario.Solucao = Solucao;
 
+                //ModeloTeporario.CustoReduzido = MontaTabelaCustoReduzido(Tabela, FO, Solucao);
+
+                //Retorna o modelo que foi criado
                 return ModeloTeporario;
             }
             else
@@ -336,5 +373,93 @@ namespace PerSymplex.Controllers
                 
             return PLin;
         }
-    }
-}
+
+        //ANÁLISE DE SENSIBILIDADE
+        public string[,] MontaTabelaCustoReduzido(string[,] Tabela, string[] FO, string[] Solucao)
+        {
+            string[,] TabelaCustoReduzido = new string[(FO.GetLength(0) + 1), 6];
+            TabelaCustoReduzido[0, 0] = "Variável de decisão";
+            TabelaCustoReduzido[0, 1] = "Valor na F.O.";
+            TabelaCustoReduzido[0, 2] = "Valor Final";
+            TabelaCustoReduzido[0, 3] = "Custo Reduzido";
+            TabelaCustoReduzido[0, 4] = "Limite Superior";
+            TabelaCustoReduzido[0, 5] = "Limite Inferior";
+
+            //Insere as Váriáveis e seus respectivos valores da FO na tabela de análise
+            for (int i = 1; i <= FO.GetLength(0); i++)
+            {
+                TabelaCustoReduzido[i, 0] = "X" + (i);
+                TabelaCustoReduzido[i, 1] = FO[i - 1];
+            }
+
+            //Insere o valor final das váriáveis de decisão retirado do arry da solucao
+            for(int i = 1; i < TabelaCustoReduzido.GetLength(0); i++)
+            {
+                for(int j = 1; j < Solucao.GetLength(0); j++)
+                {
+                    if (TabelaCustoReduzido[i,0] == (Solucao[j].Split(' ')[0]))
+                    {
+                        TabelaCustoReduzido[i, 2] = (Solucao[j].Split(' ')[2]);
+                    }
+                }
+                if(string.IsNullOrEmpty(TabelaCustoReduzido[i,2]))
+                {
+                    TabelaCustoReduzido[i, 2] = "0";
+                }
+            }
+
+            //Insere o valor do custo reduzido retirado da tabela principal
+            for (int i = 1; i <= FO.GetLength(0); i++)
+            {
+                TabelaCustoReduzido[i, 3] = Tabela[Tabela.GetLength(0)-1,i];
+            }
+
+            return TabelaCustoReduzido;
+        }//<--End of MontaTabelaCustoReduzido-->
+
+        public string[,] MontaTabelaPrecoSombra(string[,] Tabela, string[] Restricoes, string[] Solucao)
+        {
+            string[,] TabelaPrecoSombra = new string[(Restricoes.GetLength(0) + 1), 6];
+            TabelaPrecoSombra[0, 0] = "Var. representa a restição";
+            TabelaPrecoSombra[0, 1] = "Valor original da restrição";
+            TabelaPrecoSombra[0, 2] = "Valor Final";
+            TabelaPrecoSombra[0, 3] = "Preço Sombra";
+            TabelaPrecoSombra[0, 4] = "Limite Superior";
+            TabelaPrecoSombra[0, 5] = "Limite Inferior";
+
+            //Insere as Váriáveis e seus respectivos valores de restrição na tabela de análise
+            for (int i = 1; i <= Restricoes.GetLength(0); i++)
+            {
+                TabelaPrecoSombra[i, 0] = "F" + (i);
+                TabelaPrecoSombra[i, 1] = Restricoes[i - 1];
+            }
+
+            //Insere o valor final das váriáveis de folga retirado do arry da solucao
+            for (int i = 1; i < TabelaPrecoSombra.GetLength(0); i++)
+            {
+                for (int j = 1; j < Solucao.GetLength(0); j++)
+                {
+                    if (TabelaPrecoSombra[i, 0] == (Solucao[j].Split(' ')[0]))
+                    {
+                        TabelaPrecoSombra[i, 2] = (Solucao[j].Split(' ')[2]);
+                    }
+                }
+                if (string.IsNullOrEmpty(TabelaPrecoSombra[i, 2]))
+                {
+                    TabelaPrecoSombra[i, 2] = "0";
+                }
+            }
+
+            int QtdVar = Tabela.GetLength(1) - (Restricoes.GetLength(0) + 2); 
+            //Insere o valor do preço sombra retirado da tabela principal
+            for (int i = 1; i <= Restricoes.GetLength(0); i++)
+            {
+                TabelaPrecoSombra[i, 3] = Tabela[Tabela.GetLength(0) - 1, (i + QtdVar)];
+            }
+
+            return TabelaPrecoSombra;
+        }//<--End of MontaTabelaPrecoSombra-->
+
+
+    }//<--End of Class-->
+}//<--End of Namespace-->
