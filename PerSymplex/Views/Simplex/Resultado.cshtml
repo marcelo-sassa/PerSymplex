@@ -12,6 +12,28 @@
     foreach (var tabela in Model)
     {
         contador++;
+        if (tabela.Calculos != null)
+        {
+            foreach(var calculo in tabela.Calculos)
+            {
+                for(int i = 0; i< calculo.GetLength(0); i++)
+                {
+                    if(i == 0)
+                    {
+                        <div class="row">
+                            <h4>@calculo[i]</h4>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            @calculo[i]
+                        </div>
+                    }
+                }
+                <br />
+            }
+        }
         <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
             <thead>
                 <tr>
@@ -34,10 +56,9 @@
             }
             <tr>
             </tr>
-        
         </table>
         <br />
-        if (tabela.Solução != null)
+        if (tabela.Solucao != null)
         {
             if (contador == Model.Count())
             {
@@ -47,13 +68,15 @@
             {
                 @Html.Label("Solução Parcial")
             }
-            for (int i = 0; i < tabela.Solução.GetLength(0); i++)
+            for (int i = 0; i < tabela.Solucao.GetLength(0); i++)
             {
                 <div class="row">
-                    @tabela.Solução[i]
+                    @tabela.Solucao[i]
                 </div>
             }
         }
+        <br />
+        <hr />
         <br />
     }
     @Html.ActionLink("Novo Cálculo","Index","Simplex",  new { @class = "btn btn-primary" } )

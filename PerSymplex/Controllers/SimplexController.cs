@@ -38,8 +38,8 @@ namespace PerSymplex.Controllers
 
             bool Minimizacao = false;
 
-            try
-            {
+            //try
+            //{
                 if (MatrixA != null)
                 {
                     if(Model.Operacao == Operacao.Minimizar)
@@ -194,14 +194,14 @@ namespace PerSymplex.Controllers
                     //ViewData["RenderPage"] = "Resultado";
                     return View("Resultado", ListaTabelas);
                 }
-            }
-            catch (Exception ex)
-            {
-                //ViewData["PosicionaPagina"] = true;
-                //ViewData["RenderPage"] = "Erro";
-                ViewData["Exception"] = ex.Message;
-                return View("Erro");
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //ViewData["PosicionaPagina"] = true;
+            //    //ViewData["RenderPage"] = "Erro";
+            //    ViewData["Exception"] = ex.Message;
+            //    return View("Erro");
+            //}
         }
 
         public HeaderSimplex SolveSimplex(string[,] Tabela, bool Minimizacao)
@@ -233,16 +233,28 @@ namespace PerSymplex.Controllers
                 //Coloca a váriavel que deve entrar na base no seu respectivo lugar
                 NovaTabela[PLin, 0] = Tabela[0, PCol];
 
+                string[] linhaPivo = new string[Tabela.GetLength(1)];
+                linhaPivo[0] = "Linha do Pivô (Linha " + PLin + "):";
+                //ModeloTeporario.CalcLinhaPivo[0] = "Linha do Pivô (Linha " +  PLin + "):";
                 for (int j = 1; j < Tabela.GetLength(1); j++)
-                    NovaTabela[PLin, j] = (Math.Round((decimal.Parse(Tabela[PLin, j]) / decimal.Parse(Tabela[PLin, PCol])),2)).ToString();
+                {
+                    NovaTabela[PLin, j] = (Math.Round((decimal.Parse(Tabela[PLin, j]) / decimal.Parse(Tabela[PLin, PCol])), 2)).ToString();
+                    linhaPivo[j] = Tabela[PLin, j] + " / " + Tabela[PLin, PCol] + " = " + NovaTabela[PLin, j];
+                }
 
+                ModeloTeporario.Calculos.Add(linhaPivo);
                 for (int i = 1; i < Tabela.GetLength(0); i++)
                 {
                     if (i == PLin)
                         continue;
-
+                    string[] calculos = new string[Tabela.GetLength(1)];
+                    calculos[0] = "Linha " + i + ":";
                     for (int j = 1; j < Tabela.GetLength(1); j++)
-                        NovaTabela[i, j] = (Math.Round((decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Tabela[i, PCol]) * (-1)) + decimal.Parse(Tabela[i, j])),2)).ToString();
+                    {
+                        NovaTabela[i, j] = (Math.Round((decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Tabela[i, PCol]) * (-1)) + decimal.Parse(Tabela[i, j])), 2)).ToString();
+                        calculos[j] = NovaTabela[PLin, j] + " * ("+ (decimal.Parse(Tabela[i, PCol]) * (-1)) + ") + " + Tabela[i, j] + " = " + NovaTabela[i, j];
+                    }
+                    ModeloTeporario.Calculos.Add(calculos);
                     //NovaTabela[i, j] = (decimal.Parse(Tabela[i, j]) - (decimal.Parse(Tabela[i, PCol]) * decimal.Parse(NovaTabela[PLin, j]))).ToString();
                 }
                 //table = NovaTabela;
@@ -267,7 +279,7 @@ namespace PerSymplex.Controllers
                 for (int i = 1; i < (NovaTabela.GetLength(0) - 1); i++)
                     Solucao[i] = NovaTabela[i,0] + " = " + NovaTabela[i, (NovaTabela.GetLength(1) - 1)];
 
-                ModeloTeporario.Solução = Solucao;
+                ModeloTeporario.Solucao = Solucao;
 
                 return ModeloTeporario;
             }

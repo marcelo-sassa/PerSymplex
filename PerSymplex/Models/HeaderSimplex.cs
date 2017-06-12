@@ -8,6 +8,11 @@ namespace PerSymplex.Models
 {
     public class HeaderSimplex
     {
+        public HeaderSimplex()
+        {
+            Calculos = new List<string[]>();
+        }
+
         [DisplayName("Nº de Variáveis")]
         public int NVar { get; set; }
 
@@ -32,14 +37,11 @@ namespace PerSymplex.Models
         [DisplayName("Váriável que sai da base")]
         public string VarSai { get; set; }
 
-        [DisplayName("Pivô")]
-        public string[] CalcLinhaPivo { get; set; }
-
         [DisplayName("Cálculos")]
-        public string[] Calculos { get; set; }
+        public List<string[]> Calculos { get; set; }
 
         [DisplayName("Solução")]
-        public string[] Solução { get; set; }
+        public string[] Solucao { get; set; }
     }
 
     public enum Operacao
