@@ -34,6 +34,9 @@ namespace PerSymplex.Models
         [DisplayName("Objetivo da função")]
         public Operacao Operacao { get; set; }
 
+        [DisplayName("Mostrar solução")]
+        public TipoSolucao TipoSolucao { get; set; }
+
         [DisplayName("Váriável que entra na base")]
         public string VarEntra { get; set; }
 
@@ -46,12 +49,21 @@ namespace PerSymplex.Models
         [DisplayName("Solução")]
         public string[] Solucao { get; set; }
 
+        [DisplayName("Mensagem no caso de Múltiplas Soluções")]
+        public string MsgSolucaoMultipla { get; set; }
+
         //ANÁLISE DE SENSIBILIDADE
         [DisplayName("Análise sobre as variáveis de decisão")]
         public string[,] CustoReduzido { get; set; }
 
         [DisplayName("Análise sobre as restrições")]
         public string[,] PrecoSombra { get; set; }
+    }
+
+    public enum TipoSolucao
+    {
+        Direta,
+        Detalhada
     }
 
     public enum Operacao

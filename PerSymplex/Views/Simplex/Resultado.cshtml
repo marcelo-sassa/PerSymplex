@@ -7,13 +7,15 @@
 @{
     int contador = 0;
 }
+<br />
+<br />
 @if (Model != null)
 {
     foreach (var tabela in Model)
     {
         contador++;
         //MOSTRA OS CÁLCULOS
-        if (tabela.Calculos != null)
+        if (tabela.Calculos != null & ViewData["TipoSolucao"].ToString() == "Detalhada")
         {
             foreach(var calculo in tabela.Calculos)
             {
@@ -36,30 +38,39 @@
             }
         }
         //MOSTRA AS TABELAS
-        <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
-            <thead>
+        if (ViewData["TipoSolucao"].ToString() == "Detalhada")
+        {
+            <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
+                <thead>
+                    <tr>
+                        <th colspan="@tabela.Matriz.GetLength(1)">
+                            @tabela.Titulo
+                        </th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < tabela.Matriz.GetLength(0); i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < tabela.Matriz.GetLength(1); j++)
+                        {
+                            <td align="center">
+                                @tabela.Matriz[i, j]
+                            </td>
+                        }
+                    </tr>
+                }
                 <tr>
-                    <th colspan="@tabela.Matriz.GetLength(1)">
-                        @tabela.Titulo
-                    </th>
                 </tr>
-            </thead>
-            @for (int i = 0; i < tabela.Matriz.GetLength(0); i++)
-            {
-                <tr>
-                    @for (int j = 0; j < tabela.Matriz.GetLength(1); j++)
-                    {
-                        <td align="center">
-                            @tabela.Matriz[i, j]
-                            @*<input type="text" value="@Model.Matriz[i, j]" size="6px" style="text-align:center"/>*@
-                        </td>
-                    }
-                </tr>
-            }
-            <tr>
-            </tr>
-        </table>
-        <br />
+            </table>
+            <br />
+        }
+        if(!string.IsNullOrEmpty(tabela.MsgSolucaoMultipla))
+        {
+            <div class="row">
+                <h4>@tabela.MsgSolucaoMultipla</h4>
+            </div>
+            <br />
+        }
         //MOSTRA A SOLUÇÃO
         if (tabela.Solucao != null)
         {
@@ -77,8 +88,15 @@
                     @tabela.Solucao[i]
                 </div>
             }
+            <br />
         }
-        <br />
+        //MOSTRA AS VARIÁVEIS QUE ENTRAM E SAEM NA PRÓXIMA ITERAÇÃO
+        if (!string.IsNullOrEmpty(tabela.VarEntra))
+        {
+            <h4>
+                A váriável que sai da base é @tabela.VarSai e a que entra é @tabela.VarEntra
+            </h4>
+        }
         //MOSTRA A TABELA DE CUSTO REDUZIDO
         if (tabela.CustoReduzido != null)
         {
@@ -169,7 +187,3 @@
     }
     @Html.ActionLink("Novo Cálculo","Index","Simplex",  new { @class = "btn btn-primary" } )
 }
-@*<div class="row">
-    @Html.ActionLink("Calcular Solução","SolveSimplex","Simplex")
-    @Ajax.ActionLink()
-</div>*@

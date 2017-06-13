@@ -145,7 +145,7 @@ namespace PerSymplex.Controllers
                         }
                     }
                 }
-
+                
                 if (MatrixA == null)
                 {
                     //ViewData["PosicionaPagina"] = true;
@@ -156,6 +156,7 @@ namespace PerSymplex.Controllers
                 else
                 {
                     Model.Titulo = "Tabela Inicial";
+                    Model.Solucao = MontaSolucao(Model.Matriz, Minimizacao);
                     //int PCol = findPCol(Model.Matriz);
                     //bool SolLimitada = false;
                     //for (int i = 1; i < Model.Matriz.GetLength(0); i++)
@@ -180,7 +181,11 @@ namespace PerSymplex.Controllers
                     {
                         HeaderSimplex NovoModelo = SolveSimplex(Tabela, Minimizacao);
                         Tabela = NovoModelo.Matriz;
-                    
+
+                        var TabelaAnterior = ListaTabelas.Last();
+                        TabelaAnterior.VarEntra = NovoModelo.VarEntra;
+                        TabelaAnterior.VarSai = NovoModelo.VarSai;
+
                         NovoModelo.Titulo = contador + "ª Iteração";
 
                         //DEFINIR LIMITE DE ITERAÇÕES
@@ -200,10 +205,32 @@ namespace PerSymplex.Controllers
                         
                         TabelaFinal.CustoReduzido = MontaTabelaCustoReduzido(TabelaFinal.Matriz, Model.FO, TabelaFinal.Solucao);
                         TabelaFinal.PrecoSombra = MontaTabelaPrecoSombra(TabelaFinal.Matriz, Model.Restricoes, TabelaFinal.Solucao);
+                        TabelaFinal.VarSai = "";
+                        TabelaFinal.VarEntra = "";
+
+                        bool SolucaoMultipla = ValidaSolucaoMultipla(TabelaFinal.CustoReduzido);
+                        if(SolucaoMultipla)
+                        {
+                            TabelaFinal.MsgSolucaoMultipla = "Existem múltiplas soluções que satisfazem as restrições do problema. \nAbaixo é apresentada uma delas.";
+                        }
                     }
                     //ViewData["PosicionaPagina"] = true;
                     //ViewData["RenderPage"] = "Resultado";
-                    return View("Resultado", ListaTabelas);
+
+                    List<HeaderSimplex> ListaFinal = new List<HeaderSimplex>();
+                    if (Model.TipoSolucao == TipoSolucao.Direta)
+                    {
+                        //ListaFinal.Add(ListaTabelas.First());
+                        //if(ListaTabelas.Count > 1)
+                        ListaFinal.Add(ListaTabelas.Last());
+                        ViewData["TipoSolucao"] = "Direta";
+                    }
+                    else
+                    {
+                        ListaFinal = ListaTabelas;
+                        ViewData["TipoSolucao"] = "Detalhada";
+                    }
+                    return View("Resultado", ListaFinal);
                 }
             }
             catch (Exception ex)
@@ -232,6 +259,9 @@ namespace PerSymplex.Controllers
             if (SolLimitada)
             {
                 PLin = findPLin(Tabela, PCol);
+
+                ModeloTeporario.VarEntra = Tabela[0,PCol];
+                ModeloTeporario.VarSai = Tabela[PLin, 0];
 
                 //Passa os valores da primeira linha da tabela, para a nova tabela
                 for (int i = 0; i < Tabela.GetLength(0); i++)
@@ -284,38 +314,12 @@ namespace PerSymplex.Controllers
                     //Padrão de cálculo diferenciado
                     //NovaTabela[i, j] = (decimal.Parse(Tabela[i, j]) - (decimal.Parse(Tabela[i, PCol]) * decimal.Parse(NovaTabela[PLin, j]))).ToString();
                 }
-                //table = NovaTabela;
-
-                // Count a result found by the X
-                //for (int i = 0; i < result.Length; i++)
-                //{
-                //    int k = basis.IndexOf(i + 1);
-                //    if (k != -1)
-                //        result[i] = table[k, 0];
-                //    else
-                //        result[i] = 0;
-                //}
 
                 //Insere a nova tabela no modelo
                 ModeloTeporario.Matriz = NovaTabela;
-                
-                //SOLUÇÃO
-                //Cria um array de strings para armazenar cada linha da solução
-                string[] Solucao = new string[(NovaTabela.GetLength(0)-1)];
-                if(Minimizacao)
-                    //No caso de minização multiplica o Z por (-1) antes de armazenar na soluçao
-                    Solucao[0] = NovaTabela[(NovaTabela.GetLength(0) - 1), 0] + " = " + (decimal.Parse(NovaTabela[(NovaTabela.GetLength(0) - 1), (NovaTabela.GetLength(1) - 1)]) * (-1));
-                else
-                    //NO caso de maximização armazena o Z da forma que ele é retirado da tabela
-                    Solucao[0] = NovaTabela[(NovaTabela.GetLength(0) - 1), 0] + " = " + NovaTabela[(NovaTabela.GetLength(0) - 1), (NovaTabela.GetLength(1) - 1)];
-                //Loop usado para obter os resultados das outras váriaveis que estão base exceto Z
-                for (int i = 1; i < (NovaTabela.GetLength(0) - 1); i++)
-                    Solucao[i] = NovaTabela[i,0] + " = " + NovaTabela[i, (NovaTabela.GetLength(1) - 1)];
 
-                //Finalmente coloca no modelo o array com todas aslinhas que compões a solução
-                ModeloTeporario.Solucao = Solucao;
-
-                //ModeloTeporario.CustoReduzido = MontaTabelaCustoReduzido(Tabela, FO, Solucao);
+                //Finalmente coloca no modelo o array com todas as linhas que compões a solução
+                ModeloTeporario.Solucao = MontaSolucao(NovaTabela, Minimizacao);
 
                 //Retorna o modelo que foi criado
                 return ModeloTeporario;
@@ -324,6 +328,24 @@ namespace PerSymplex.Controllers
             {
                 throw new Exception("Não foi possível resolver pois a solução é ilimitada!");
             }
+        }
+
+        public string[] MontaSolucao(string[,] Tabela, bool Minimizacao)
+        {
+            //SOLUÇÃO
+            //Cria um array de strings para armazenar cada linha da solução
+            string[] Solucao = new string[(Tabela.GetLength(0) - 1)];
+            if (Minimizacao)
+                //No caso de minização multiplica o Z por (-1) antes de armazenar na soluçao
+                Solucao[0] = Tabela[(Tabela.GetLength(0) - 1), 0] + " = " + (decimal.Parse(Tabela[(Tabela.GetLength(0) - 1), (Tabela.GetLength(1) - 1)]) * (-1));
+            else
+                //NO caso de maximização armazena o Z da forma que ele é retirado da tabela
+                Solucao[0] = Tabela[(Tabela.GetLength(0) - 1), 0] + " = " + Tabela[(Tabela.GetLength(0) - 1), (Tabela.GetLength(1) - 1)];
+            //Loop usado para obter os resultados das outras váriaveis que estão base exceto Z
+            for (int i = 1; i < (Tabela.GetLength(0) - 1); i++)
+                Solucao[i] = Tabela[i, 0] + " = " + Tabela[i, (Tabela.GetLength(1) - 1)];
+
+            return Solucao;
         }
 
         public bool CondicaoDeParada(string[,] Tabela)
@@ -460,6 +482,17 @@ namespace PerSymplex.Controllers
             return TabelaPrecoSombra;
         }//<--End of MontaTabelaPrecoSombra-->
 
+        public bool ValidaSolucaoMultipla(string[,] TabelaCustoReduzido)
+        {
+            for(int i = 1; i < TabelaCustoReduzido.GetLength(0); i++)
+            {
+                if((decimal.Parse(TabelaCustoReduzido[i,2]) == 0) & (decimal.Parse(TabelaCustoReduzido[i, 3]) == 0))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }//<--End of Class-->
 }//<--End of Namespace-->
