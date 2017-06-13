@@ -479,8 +479,76 @@ namespace PerSymplex.Controllers
                 TabelaPrecoSombra[i, 3] = Tabela[Tabela.GetLength(0) - 1, (i + QtdVar)];
             }
 
+            //string[,] LimiteRestricoes = CalculaLimiteVariaveisFolga(Tabela,Restricoes);
+
+            //for (int i = 1; i < TabelaPrecoSombra.GetLength(0); i++)
+            //{
+            //    TabelaPrecoSombra[i, 4] = LimiteRestricoes[(i-1), 0];
+            //    TabelaPrecoSombra[i, 5] = LimiteRestricoes[(i-1), 1];
+            //}
+
             return TabelaPrecoSombra;
         }//<--End of MontaTabelaPrecoSombra-->
+
+        //public string[,] CalculaLimiteVariaveisFolga(string[,] Tabela, string[] Restricoes)
+        //{
+        //    string[,] LimiteRestricoes = new string[Restricoes.GetLength(0),2];
+        //    int ColRestricao = Tabela.GetLength(1) - (Restricoes.GetLength(0) + 1);
+
+        //    for (int i = 0; i < Restricoes.GetLength(0); i++, ColRestricao++)
+        //    {
+        //        string VarFolga = "F" + (i + 1);
+        //        decimal VlInicial = decimal.Parse(Restricoes[i]);
+        //        decimal minDelta = decimal.MaxValue;
+        //        bool HasMin = false;
+        //        decimal maxDelta = decimal.MinValue;
+        //        bool HasMax = false;
+
+        //        //var shadowPrice = matrix[matrix.length - 1][subjectIndex];
+                
+        //        for (int linha = 1; linha < (Tabela.GetLength(0) - 1); linha++)
+        //        {
+        //            decimal VlVarFolgaLin = decimal.Parse(Tabela[linha,ColRestricao]);
+        //            decimal bLin = decimal.Parse(Tabela[linha, Tabela.GetLength(1) - 1]);
+
+        //            if (VlVarFolgaLin == 0)
+        //                continue;
+
+        //            decimal delta = (bLin / VlVarFolgaLin) * (-1);
+                        
+        //            if(delta < 0)
+        //                if (delta > maxDelta)
+        //                {
+        //                    maxDelta = delta;
+        //                    HasMax = true;
+        //                }
+
+        //            if (delta > 0)
+        //                if (delta < minDelta)
+        //                {
+        //                    minDelta = delta;
+        //                    HasMin = true;
+        //                }
+        //        }
+
+        //        string LimiteSuperior = "";
+        //        string LimiteInferior = "";
+        //        if (HasMin)
+        //            LimiteSuperior = (minDelta + VlInicial).ToString();
+        //        else
+        //            LimiteSuperior = "Infinito";
+
+        //        if (HasMax)
+        //            LimiteInferior = (maxDelta + VlInicial).ToString();
+        //        else
+        //            LimiteInferior = "Infinito";
+
+        //        LimiteRestricoes[i, 0] = LimiteSuperior;
+        //        LimiteRestricoes[i, 1] = LimiteInferior;
+        //    }
+
+        //    return LimiteRestricoes;
+        //}
 
         public bool ValidaSolucaoMultipla(string[,] TabelaCustoReduzido)
         {

@@ -127,7 +127,8 @@
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <a class="btn get-started" href="Simplex/Index">Get Started</a>
+                    @Html.ActionLink("Get Started", "Index", "Simplex", new { @class = "btn get-started" })
+                    @*<a class="btn get-started" href="Simplex/Index">Get Started</a>*@
                 </div>
             </div>
         </div>
