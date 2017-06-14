@@ -282,7 +282,7 @@ namespace PerSymplex.Controllers
                 for (int j = 1; j < Tabela.GetLength(1); j++)
                 {
                     //Divide as células da linha do pivô pelo próprio pivô
-                    NovaTabela[PLin, j] = (Math.Round((decimal.Parse(Tabela[PLin, j]) / decimal.Parse(Tabela[PLin, PCol])), 2)).ToString();
+                    NovaTabela[PLin, j] = (Math.Round((decimal.Parse(Tabela[PLin, j]) / decimal.Parse(Tabela[PLin, PCol])), 3)).ToString();
                     //Insere no array os cálculos feitos com cada célula
                     linhaPivo[j] = Tabela[PLin, j] + " / " + Tabela[PLin, PCol] + " = " + NovaTabela[PLin, j];
                 }
@@ -305,7 +305,7 @@ namespace PerSymplex.Controllers
                     for (int j = 1; j < Tabela.GetLength(1); j++)
                     {
                         //Efetua os cálculos propriamente ditos
-                        NovaTabela[i, j] = (Math.Round((decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Tabela[i, PCol]) * (-1)) + decimal.Parse(Tabela[i, j])), 2)).ToString();
+                        NovaTabela[i, j] = (Math.Round((decimal.Parse(NovaTabela[PLin, j]) * (decimal.Parse(Tabela[i, PCol]) * (-1)) + decimal.Parse(Tabela[i, j])), 3)).ToString();
                         //Insere no array os cálculos feitos com cada célula
                         calculos[j] = NovaTabela[PLin, j] + " * ("+ (decimal.Parse(Tabela[i, PCol]) * (-1)) + ") + " + Tabela[i, j] + " = " + NovaTabela[i, j];
                     }
@@ -436,14 +436,22 @@ namespace PerSymplex.Controllers
                 TabelaCustoReduzido[i, 3] = Tabela[Tabela.GetLength(0)-1,i];
             }
 
+            string[,] LimiteVD = CalculaLimiteVariaveisDecisao(Tabela, FO);
+
+            for (int i = 1; i < TabelaCustoReduzido.GetLength(0); i++)
+            {
+                TabelaCustoReduzido[i, 4] = LimiteVD[(i - 1), 0];
+                TabelaCustoReduzido[i, 5] = LimiteVD[(i - 1), 1];
+            }
+
             return TabelaCustoReduzido;
         }//<--End of MontaTabelaCustoReduzido-->
 
         public string[,] MontaTabelaPrecoSombra(string[,] Tabela, string[] Restricoes, string[] Solucao)
         {
             string[,] TabelaPrecoSombra = new string[(Restricoes.GetLength(0) + 1), 6];
-            TabelaPrecoSombra[0, 0] = "Var. representa a restição";
-            TabelaPrecoSombra[0, 1] = "Valor original da restrição";
+            TabelaPrecoSombra[0, 0] = "Var. de folga";
+            TabelaPrecoSombra[0, 1] = "Valor da restrição";
             TabelaPrecoSombra[0, 2] = "Valor Final";
             TabelaPrecoSombra[0, 3] = "Preço Sombra";
             TabelaPrecoSombra[0, 4] = "Limite Superior";
@@ -479,76 +487,136 @@ namespace PerSymplex.Controllers
                 TabelaPrecoSombra[i, 3] = Tabela[Tabela.GetLength(0) - 1, (i + QtdVar)];
             }
 
-            //string[,] LimiteRestricoes = CalculaLimiteVariaveisFolga(Tabela,Restricoes);
+            string[,] LimiteRestricoes = CalculaLimiteVariaveisFolga(Tabela, Restricoes);
 
-            //for (int i = 1; i < TabelaPrecoSombra.GetLength(0); i++)
-            //{
-            //    TabelaPrecoSombra[i, 4] = LimiteRestricoes[(i-1), 0];
-            //    TabelaPrecoSombra[i, 5] = LimiteRestricoes[(i-1), 1];
-            //}
+            for (int i = 1; i < TabelaPrecoSombra.GetLength(0); i++)
+            {
+                TabelaPrecoSombra[i, 4] = LimiteRestricoes[(i - 1), 0];
+                TabelaPrecoSombra[i, 5] = LimiteRestricoes[(i - 1), 1];
+            }
 
             return TabelaPrecoSombra;
         }//<--End of MontaTabelaPrecoSombra-->
 
-        //public string[,] CalculaLimiteVariaveisFolga(string[,] Tabela, string[] Restricoes)
-        //{
-        //    string[,] LimiteRestricoes = new string[Restricoes.GetLength(0),2];
-        //    int ColRestricao = Tabela.GetLength(1) - (Restricoes.GetLength(0) + 1);
+        public string[,] CalculaLimiteVariaveisDecisao(string[,] Tabela, string[] FO)
+        {
+            string[,] LimiteVD = new string[FO.GetLength(0), 2];
+           // int ColRestricao = Tabela.GetLength(1) - (Restricoes.GetLength(0) + 1);
 
-        //    for (int i = 0; i < Restricoes.GetLength(0); i++, ColRestricao++)
-        //    {
-        //        string VarFolga = "F" + (i + 1);
-        //        decimal VlInicial = decimal.Parse(Restricoes[i]);
-        //        decimal minDelta = decimal.MaxValue;
-        //        bool HasMin = false;
-        //        decimal maxDelta = decimal.MinValue;
-        //        bool HasMax = false;
+            for (int i = 0; i < FO.GetLength(0); i++)
+            {
+                string VarDecisao = "X" + (i + 1);
+                decimal VlInicial = decimal.Parse(FO[i]);
+                decimal minDelta = decimal.MaxValue;
+                bool HasMin = false;
+                decimal maxDelta = decimal.MinValue;
+                bool HasMax = false;
 
-        //        //var shadowPrice = matrix[matrix.length - 1][subjectIndex];
-                
-        //        for (int linha = 1; linha < (Tabela.GetLength(0) - 1); linha++)
-        //        {
-        //            decimal VlVarFolgaLin = decimal.Parse(Tabela[linha,ColRestricao]);
-        //            decimal bLin = decimal.Parse(Tabela[linha, Tabela.GetLength(1) - 1]);
+                //var shadowPrice = matrix[matrix.length - 1][subjectIndex];
 
-        //            if (VlVarFolgaLin == 0)
-        //                continue;
+                for (int linha = 1; linha < (Tabela.GetLength(0) - 1); linha++)
+                {
+                    decimal VlVarDecisaoLin = decimal.Parse(Tabela[linha, i + 1]);
+                    decimal bLin = decimal.Parse(Tabela[linha, Tabela.GetLength(1) - 1]);
 
-        //            decimal delta = (bLin / VlVarFolgaLin) * (-1);
-                        
-        //            if(delta < 0)
-        //                if (delta > maxDelta)
-        //                {
-        //                    maxDelta = delta;
-        //                    HasMax = true;
-        //                }
+                    if (VlVarDecisaoLin == 0)
+                        continue;
 
-        //            if (delta > 0)
-        //                if (delta < minDelta)
-        //                {
-        //                    minDelta = delta;
-        //                    HasMin = true;
-        //                }
-        //        }
+                    decimal delta = (bLin / VlVarDecisaoLin) * (-1);
 
-        //        string LimiteSuperior = "";
-        //        string LimiteInferior = "";
-        //        if (HasMin)
-        //            LimiteSuperior = (minDelta + VlInicial).ToString();
-        //        else
-        //            LimiteSuperior = "Infinito";
+                    if (delta < 0)
+                        if (delta > maxDelta)
+                        {
+                            maxDelta = delta;
+                            HasMax = true;
+                        }
 
-        //        if (HasMax)
-        //            LimiteInferior = (maxDelta + VlInicial).ToString();
-        //        else
-        //            LimiteInferior = "Infinito";
+                    if (delta > 0)
+                        if (delta < minDelta)
+                        {
+                            minDelta = delta;
+                            HasMin = true;
+                        }
+                }
 
-        //        LimiteRestricoes[i, 0] = LimiteSuperior;
-        //        LimiteRestricoes[i, 1] = LimiteInferior;
-        //    }
+                string LimiteSuperior = "";
+                string LimiteInferior = "";
+                if (HasMin)
+                    LimiteSuperior = (Math.Round((minDelta + VlInicial), 3)).ToString();
+                else
+                    LimiteSuperior = "Infinito";
 
-        //    return LimiteRestricoes;
-        //}
+                if (HasMax)
+                    LimiteInferior = (Math.Round((maxDelta + VlInicial), 3)).ToString();
+                else
+                    LimiteInferior = "Infinito";
+
+                LimiteVD[i, 0] = LimiteSuperior;
+                LimiteVD[i, 1] = LimiteInferior;
+            }
+
+            return LimiteVD;
+        }
+
+        public string[,] CalculaLimiteVariaveisFolga(string[,] Tabela, string[] Restricoes)
+        {
+            string[,] LimiteRestricoes = new string[Restricoes.GetLength(0), 2];
+            int ColRestricao = Tabela.GetLength(1) - (Restricoes.GetLength(0) + 1);
+
+            for (int i = 0; i < Restricoes.GetLength(0); i++, ColRestricao++)
+            {
+                string VarFolga = "F" + (i + 1);
+                decimal VlInicial = decimal.Parse(Restricoes[i]);
+                decimal minDelta = decimal.MaxValue;
+                bool HasMin = false;
+                decimal maxDelta = decimal.MinValue;
+                bool HasMax = false;
+
+                //var shadowPrice = matrix[matrix.length - 1][subjectIndex];
+
+                for (int linha = 1; linha < (Tabela.GetLength(0) - 1); linha++)
+                {
+                    decimal VlVarFolgaLin = decimal.Parse(Tabela[linha, ColRestricao]);
+                    decimal bLin = decimal.Parse(Tabela[linha, Tabela.GetLength(1) - 1]);
+
+                    if (VlVarFolgaLin == 0)
+                        continue;
+
+                    decimal delta = (bLin / VlVarFolgaLin) * (-1);
+
+                    if (delta < 0)
+                        if (delta > maxDelta)
+                        {
+                            maxDelta = delta;
+                            HasMax = true;
+                        }
+
+                    if (delta > 0)
+                        if (delta < minDelta)
+                        {
+                            minDelta = delta;
+                            HasMin = true;
+                        }
+                }
+
+                string LimiteSuperior = "";
+                string LimiteInferior = "";
+                if (HasMin)
+                    LimiteSuperior = (Math.Round((minDelta + VlInicial),3)).ToString();
+                else
+                    LimiteSuperior = "Infinito";
+
+                if (HasMax)
+                    LimiteInferior = (Math.Round((maxDelta + VlInicial),3)).ToString();
+                else
+                    LimiteInferior = "Infinito";
+
+                LimiteRestricoes[i, 0] = LimiteSuperior;
+                LimiteRestricoes[i, 1] = LimiteInferior;
+            }
+
+            return LimiteRestricoes;
+        }
 
         public bool ValidaSolucaoMultipla(string[,] TabelaCustoReduzido)
         {
