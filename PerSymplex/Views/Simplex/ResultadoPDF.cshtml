@@ -1,0 +1,189 @@
+﻿@model List<PerSymplex.Models.HeaderSimplex>
+
+@{
+    ViewBag.Title = "Tabelas Resultantes";
+}
+@{
+    int contador = 0;
+}
+
+@if (Model != null)
+{
+    foreach (var tabela in Model)
+    {
+        contador++;
+        //MOSTRA OS CÁLCULOS
+        if (tabela.Calculos != null & ViewData["TipoSolucao"].ToString() == "Detalhada")
+        {
+            <div class="teste collapse">
+                @foreach (var calculo in tabela.Calculos)
+                {
+                    for (int i = 0; i < calculo.GetLength(0); i++)
+                    {
+                        if (i == 0)
+                        {
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h4>@calculo[i]</h4>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    @calculo[i]
+                                </div>
+                            </div>
+                        }
+                    }
+                    <br />
+                }
+            </div>
+        }
+        //MOSTRA AS TABELAS
+        if (ViewData["TipoSolucao"].ToString() == "Detalhada")
+        {
+            <table class="table table-responsive table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="@tabela.Matriz.GetLength(1)">
+                            @tabela.Titulo
+                        </th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < tabela.Matriz.GetLength(0); i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < tabela.Matriz.GetLength(1); j++)
+                        {
+                            <td align="center">
+                                @tabela.Matriz[i, j]
+                            </td>
+                        }
+                    </tr>
+                }
+                <tr></tr>
+            </table>
+            <br />
+        }
+        if (!string.IsNullOrEmpty(tabela.MsgSolucaoMultipla))
+        {
+            <div class="row">
+                <h4>@tabela.MsgSolucaoMultipla</h4>
+            </div>
+            <br />
+        }
+        //MOSTRA A SOLUÇÃO
+        if (tabela.Solucao != null)
+        {
+            if (contador == Model.Count())
+            {
+                @Html.Label("Solução Ótima")
+            }
+            else
+            {
+                @Html.Label("Solução Parcial")
+            }
+            for (int i = 0; i < tabela.Solucao.GetLength(0); i++)
+            {
+                <div class="row">
+                    <div class="col-xs-12">
+                        @tabela.Solucao[i]
+                    </div>
+                </div>
+            }
+            <br />
+        }
+        //MOSTRA AS VARIÁVEIS QUE ENTRAM E SAEM NA PRÓXIMA ITERAÇÃO
+        if (!string.IsNullOrEmpty(tabela.VarEntra))
+        {
+            <h4>
+                A variável que sai da base é @tabela.VarSai e a que entra é @tabela.VarEntra
+            </h4>
+        }
+        //MOSTRA A TABELA DE CUSTO REDUZIDO
+        if (tabela.CustoReduzido != null)
+        {
+            <table class="table table-responsive table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="@tabela.CustoReduzido.GetLength(1)">
+                            <h4>Análise sobre as variáveis de decisão</h4>
+                        </th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < tabela.CustoReduzido.GetLength(0); i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < tabela.CustoReduzido.GetLength(1); j++)
+                        {
+                            if (string.IsNullOrEmpty(tabela.CustoReduzido[i, j]))
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                if (i == 0)
+                                {
+                                    <th align="center">
+                                        @tabela.CustoReduzido[i, j]
+                                    </th>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        @tabela.CustoReduzido[i, j]
+                                    </td>
+                                }
+                            }
+                        }
+                    </tr>
+                }
+                <tr></tr>
+            </table>
+        }
+        <br />
+        //MOSTRA A TABELA DE PREÇO SOMBRA
+        if (tabela.PrecoSombra != null)
+        {
+            <table class="table table-responsive table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="@tabela.CustoReduzido.GetLength(1)">
+                            <h4>Análise sobre as restrições (variáveis de folga)</h4>
+                        </th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < tabela.PrecoSombra.GetLength(0); i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < tabela.PrecoSombra.GetLength(1); j++)
+                        {
+                            if (string.IsNullOrEmpty(tabela.PrecoSombra[i, j]))
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                if (i == 0)
+                                {
+                                    <th align="center">
+                                        @tabela.PrecoSombra[i, j]
+                                    </th>
+                                }
+                                else
+                                {
+                                    <td align="center">
+                                        @tabela.PrecoSombra[i, j]
+                                    </td>
+                                }
+                            }
+                        }
+                    </tr>
+                }
+                <tr></tr>
+            </table>
+        }
+    }
+}

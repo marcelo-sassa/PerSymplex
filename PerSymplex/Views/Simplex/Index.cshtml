@@ -103,6 +103,13 @@
                         @Html.ValidationMessageFor(model => model.TipoSolucao)
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.GerarPDF)
+                        @Html.EnumDropDownListFor(model => model.GerarPDF)
+                        @Html.ValidationMessageFor(model => model.GerarPDF)
+                    </div>
+                </div>
             </div>
             
         }
@@ -113,4 +120,3 @@
         </div>
     </div>
 }
-

@@ -1,4 +1,6 @@
 ﻿using PerSymplex.Models;
+using Rotativa;
+using Rotativa.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -230,7 +232,25 @@ namespace PerSymplex.Controllers
                         ListaFinal = ListaTabelas;
                         ViewData["TipoSolucao"] = "Detalhada";
                     }
-                    return View("Resultado", ListaFinal);
+
+                    if(Model.GerarPDF == GerarPDF.Sim)
+                    {
+
+                        var PDF = new ViewAsPdf
+                        {
+                            ViewName = "ResultadoPDF",
+                            FileName = "Persymplex(Resultados da Análise).pdf",
+                            PageSize = Size.A4,
+                            IsGrayScale = true,
+                            Model = ListaFinal
+                        };
+
+                        return File(PDF.BuildPdf(ControllerContext), "application/pdf");
+                    }
+                    else
+                    {
+                        return View("Resultado", ListaFinal);
+                    }
                 }
             }
             catch (Exception ex)

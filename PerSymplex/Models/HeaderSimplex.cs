@@ -37,6 +37,9 @@ namespace PerSymplex.Models
         [DisplayName("Mostrar solução")]
         public TipoSolucao TipoSolucao { get; set; }
 
+        [DisplayName("Gerar PDF")]
+        public GerarPDF GerarPDF { get; set; }
+
         [DisplayName("Váriável que entra na base")]
         public string VarEntra { get; set; }
 
@@ -58,6 +61,12 @@ namespace PerSymplex.Models
 
         [DisplayName("Análise sobre as restrições")]
         public string[,] PrecoSombra { get; set; }
+    }
+
+    public enum GerarPDF
+    {
+        Não,
+        Sim
     }
 
     public enum TipoSolucao
