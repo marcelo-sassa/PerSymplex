@@ -3,10 +3,40 @@
     ViewBag.Title = "Erro";
 }
 
-<h2>Erro</h2>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top cabecalho" role="navigation">
+    <div class="container">
+        <div class="navbar-header page-scroll menu">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand page-scroll logo" href="./TesteIndex">Persymplex</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav menu">
+                <li>
+                    @*<a class="page-scroll" href="#simplex">Simplex</a>*@
+                    @Html.ActionLink("Novo Cálculo", "Index", "Simplex")
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<div class="row" style="padding-top: 100px;">
+    <div class="col-xs-12">
+        <h1>Erro</h1>
+        <br />
+        <br />
+        <h2><strong>@ViewData["Exception"]</strong></h2>
+        <br />
+        @Html.ActionLink("Novo Cálculo", "Index", "Simplex", new { @class = "btn novo-calculo" })
+    </div>
+</div>
 
 
-<marquee><h2><strong>@ViewData["Exception"]</strong></h2></marquee>
-
-<br />
-@Html.ActionLink("Novo Cálculo", "Index", "Simplex", new { @class = "btn btn-primary" })

@@ -30,7 +30,7 @@
 
         if (tabela.Calculos != null & ViewData["TipoSolucao"].ToString() == "Detalhada")
         {
-            <div class="teste collapse" id="@id_div">
+            <div class="collapse" id="@id_div">
                 @foreach (var calculo in tabela.Calculos)
                 {
                 for (int i = 0; i < calculo.GetLength(0); i++)
