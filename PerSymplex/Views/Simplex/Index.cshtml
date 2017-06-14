@@ -6,15 +6,13 @@
 }
 
 
-@using (Html.BeginForm("Index","Simplex",FormMethod.Post))
+@using (Html.BeginForm("Index", "Simplex", FormMethod.Post))
 {
+
     if (Model != null)
     {
-    <br />
-    <br />
-    <br />
-    <div class="row">
-        <div class="col-md-2">
+    <div class="row inicio-simplex">
+        <div class="col-sm-offset-4 col-sm-2 col-xs-6">
             @Html.LabelFor(model => model.NVar)
             @if (Model.NVar > 0)
             {
@@ -25,7 +23,7 @@
                 @Html.EditorFor(model => model.NVar, new { htmlAttributes = new { @class = "form-control", required = "required", type = "number", min = "1" } })
             }
         </div>
-        <div class="col-md-2">
+        <div class="col-sm-2 col-xs-6">
             @Html.LabelFor(model => model.NRest)
             @if (Model.NRest > 0)
             {
@@ -36,81 +34,83 @@
                 @Html.EditorFor(model => model.NRest, new { htmlAttributes = new { @class = "form-control", required = "required", type = "number", min = "1" } })
             }
         </div>
+
     </div>
         if (Model.NRest > 0 & Model.NRest > 0)
         {
-            <br />
-            <div class="row">
-                <table cellpadding="0px" cellspacing="0px" style="border:0px">
-                    <tr>
-                        <td colspan="2">
-                            @Html.LabelFor(model => model.Operacao)
-                            @Html.EnumDropDownListFor(model => model.Operacao)
-                            @Html.ValidationMessageFor(model => model.Operacao)
-                        </td>
-                    </tr>
-                    <caption>Função Objetivo</caption>
-                    <tr>
-                        @for (int i = 0; i < Model.NVar; i++)
+            <div class="container">
+                <div class="row maximizar">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(model => model.Operacao)
+                        @Html.EnumDropDownListFor(model => model.Operacao)
+                        @Html.ValidationMessageFor(model => model.Operacao)
+                             
+                            <h5>Função Objetivo</h5>
+                            <ul class="funcao">
+                                @for (int i = 0; i < Model.NVar; i++)
+                                {
+                                    <li>
+                                        @if (i == 0)
+                                        {
+                                            @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px; margin:0px 5px;", required = "required", type = "number", step = "any" } }) @("X" + (i + 1))
+                                        }
+                                        else if (i < Model.NVar)
+                                        {
+                                            @("+")@Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px; margin:0px 5px;", required = "required", type = "number" } }) @("X" + (i + 1))
+                                        }
+                                        else
+                                        {
+                                            @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px; margin:0px 5px;", required = "required", type = "number" }}) @("X" + (i + 1))
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h5>Restrições</h5>
+                        @for (int i = 0; i < Model.NRest; i++)
                         {
-                            <td>
-                                @if (i == 0)
-                                {
-                                    @("Função: ") @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px", required = "required", type = "number" } }) @("X" + (i+1))
-                                }
-                                else if (i < Model.NVar)
-                                {
-                                    @(" + ")@Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px", required = "required", type = "number" } }) @("X" + (i + 1))
-                                }
-                                else
-                                {
-                                    @Html.EditorFor(model => model.FO[i], new { htmlAttributes = new { style = "width:60px", required = "required", type = "number"} }) @("X" + (i + 1))
-                                }
-                            </td>
-                        }
-                    </tr>
-                </table>
-            </div>
-            <br />
-            <div class="row">
-                <table cellpadding="0px" cellspacing="0px" style="border:0px">
-                    <caption>Restrições</caption>
-                    @for (int i = 0; i < Model.NRest; i++)
-                    {
-                        <tr>
+                            <div class="restricoes">
                             @for (int j = 0; j < (Model.NVar + 1); j++)
                             {
-                                <td style="padding:0px;border:0px">
-                                    @Html.TextBox("MatrixA" + i, null, new { style = "width:60px", required = "required", type = "number"})
-                                </td>
+
+                                @Html.TextBox("MatrixA" + i, null, new { style = "width:60px", required = "required", type = "number", @class = "input-valor" })
+
                                 if (j < Model.NVar - 1)
                                 {
-                                    <td>
+                                    
                                         @("X" + (j + 1) + " + ")
-                                    </td>
+                                    
                                 }
                                 else if (j == Model.NVar - 1)
                                 {
-                                    <td>
+                                    
                                         @("X" + (j + 1) + " <= ")
-                                    </td>
+                                    
                                 }
                             }
-                        </tr>
-                    }
-                </table>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    @Html.LabelFor(model => model.TipoSolucao)
-                    @Html.EnumDropDownListFor(model => model.TipoSolucao)
-                    @Html.ValidationMessageFor(model => model.TipoSolucao)
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.TipoSolucao)
+                        @Html.EnumDropDownListFor(model => model.TipoSolucao)
+                        @Html.ValidationMessageFor(model => model.TipoSolucao)
+                    </div>
                 </div>
             </div>
+            
         }
     }
-    <div>
-        <br />
-        <input class="btn btn-primary" type="submit" value="Confirmar"/>
+    <div class="row calcular">
+        <div class="col-xs-12">
+            <input class="btn exibir-calculos" type="submit" value="Confirmar" />
+        </div>
     </div>
 }
+

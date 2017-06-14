@@ -7,42 +7,61 @@
 @{
     int contador = 0;
 }
-<br />
-<br />
+
 @if (Model != null)
 {
     foreach (var tabela in Model)
     {
         contador++;
+        string id_div = "calculo" + contador;
         //MOSTRA OS CÁLCULOS
+        if (id_div == "calculo1")
+        {
+            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#@id_div" style="display:none;">
+                @id_div
+            </button>
+        }
+        else
+        {
+            <button type="button" class="btn exibir-calculos" data-toggle="collapse" data-target="#@id_div">
+                Exibir Cálculos
+            </button>
+        }
+
         if (tabela.Calculos != null & ViewData["TipoSolucao"].ToString() == "Detalhada")
         {
-            foreach(var calculo in tabela.Calculos)
-            {
-                for(int i = 0; i< calculo.GetLength(0); i++)
+            <div class="teste collapse" id="@id_div">
+                @foreach (var calculo in tabela.Calculos)
                 {
-                    if(i == 0)
-                    {
-                        <div class="row">
-                            <h4>@calculo[i]</h4>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="row">
-                            @calculo[i]
-                        </div>
-                    }
+                for (int i = 0; i < calculo.GetLength(0); i++)
+                {
+                if (i == 0)
+                {
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>@calculo[i]</h4>
+                    </div>
+                </div>
+                }
+                else
+                {
+                <div class="row">
+                    <div class="col-xs-12">
+                        @calculo[i]
+                    </div>
+                </div>
+                }
                 }
                 <br />
-            }
+                }
+            </div>
         }
         //MOSTRA AS TABELAS
         if (ViewData["TipoSolucao"].ToString() == "Detalhada")
         {
-            <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
+            <table class="table table-responsive table-bordered">
                 <thead>
-                    <tr>
+                    <tr >
                         <th colspan="@tabela.Matriz.GetLength(1)">
                             @tabela.Titulo
                         </th>
@@ -85,7 +104,9 @@
             for (int i = 0; i < tabela.Solucao.GetLength(0); i++)
             {
                 <div class="row">
-                    @tabela.Solucao[i]
+                    <div class="col-xs-12">
+                        @tabela.Solucao[i]
+                    </div>
                 </div>
             }
             <br />
@@ -94,13 +115,13 @@
         if (!string.IsNullOrEmpty(tabela.VarEntra))
         {
             <h4>
-                A váriável que sai da base é @tabela.VarSai e a que entra é @tabela.VarEntra
+                A variável que sai da base é @tabela.VarSai e a que entra é @tabela.VarEntra
             </h4>
         }
         //MOSTRA A TABELA DE CUSTO REDUZIDO
         if (tabela.CustoReduzido != null)
         {
-            <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
+            <table class="table table-responsive table-bordered">
                 <thead>
                     <tr>
                         <th colspan="@tabela.CustoReduzido.GetLength(1)">
@@ -144,7 +165,7 @@
         //MOSTRA A TABELA DE PREÇO SOMBRA
         if (tabela.PrecoSombra != null)
         {
-            <table class="table table-responsive" cellpadding="0px" cellspacing="0px" style="border:0px">
+            <table class="table table-responsive table-bordered">
                 <thead>
                     <tr>
                         <th colspan="@tabela.CustoReduzido.GetLength(1)">
@@ -182,8 +203,11 @@
                 <tr></tr>
             </table>
         }
-        <hr />
-        <br />
     }
-    @Html.ActionLink("Novo Cálculo","Index","Simplex",  new { @class = "btn btn-primary" } )
+    <div class="row row-novo-calculo">
+        <div class="col-xs-12">
+            @Html.ActionLink("Novo Cálculo", "Index", "Simplex", new { @class = "btn novo-calculo" })
+        </div>
+    </div>
+    
 }
