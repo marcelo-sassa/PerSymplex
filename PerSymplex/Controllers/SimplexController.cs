@@ -419,7 +419,7 @@ namespace PerSymplex.Controllers
         //ANÁLISE DE SENSIBILIDADE
         public string[,] MontaTabelaCustoReduzido(string[,] Tabela, string[] FO, string[] Solucao)
         {
-            string[,] TabelaCustoReduzido = new string[(FO.GetLength(0) + 1), 6];
+            string[,] TabelaCustoReduzido = new string[(FO.GetLength(0) + 1), 4];
             TabelaCustoReduzido[0, 0] = "Variável de decisão";
             TabelaCustoReduzido[0, 1] = "Valor na F.O.";
             TabelaCustoReduzido[0, 2] = "Valor Final";
