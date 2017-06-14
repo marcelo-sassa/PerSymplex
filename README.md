@@ -1,6 +1,6 @@
 # Simplex (Persymplex)
 
-[Clique aqui](#) para acessar a aplicação.
+[Clique aqui](http://persymplex.azurewebsites.net/) para acessar a aplicação.
 
 **Projeto de Pesquisa Operacional** - 5º semestre BSI - UNIVEM
 
@@ -31,43 +31,45 @@ linear com inúmeras variáveis e restrições, realizando a maximização ou mi
 * Passo a passo dos cálculos;
 * Análise de sensibilidade;
 * Tratativa de erros de soluções infinitas e valores inválidos;
-* Botão de download da solução em pdf.
+* Opção de gerar solução em .pdf.
 
 ## Problemas conhecidos e limitações
 
 * As restrições são estritamente menores ou iguais à zero (<= 0);
+* Os campos só aceitam números inteiros.
 
 ## Datas importantes
 
 | Data  | Evento    |
 |-------|-----------|
-| --/--/----    | Início do projeto   |
-| --/--/----    | Definição das funcionalidades   |
-| --/--/----    | Criação do mockup da aplicação   |
-| --/--/----    | Criação do template inicial  |
-| --/--/----    | Resolução de problemas de maximização e minimização    |
-| --/--/----    | Primeiros testes    |
-| --/--/----    | Resolução da análise de sensibilidade   |
-| --/--/----    | Criação do botão de download    |
-| --/--/----    | Hospedagem da aplicação  |
-| --/--/----    | Entrega da versão final do projeto   |
+| 10/05/2017    | Início do projeto   |
+| 12/05/2017    | Definição das funcionalidades   |
+| 17/05/2017    | Criação do mockup da aplicação   |
+| 24/05/2017    | Criação do template inicial  |
+| 01/06/2017    | Resolução de problemas de maximização e minimização    |
+| 01/06/2017    | Primeiros testes    |
+| 10/06/2017    | Resolução da análise de sensibilidade   |
+| 12/06/2017    | Hospedagem da aplicação  |
+| 12/06/2017    | Criação da versão para impressão em .pdf    |
+| 14/06/2017    | Testes finais   |
+| 14/06/2017    | Entrega da versão final do projeto   |
 
 ## Compatibilidade
 
 | Requisitos    | Ferramentas   |
 |---------------|---------------|
 | Navegadores   | Google Chrome, Mozilla Firefox, Internet Explorer 9+, Microsoft Edge, Opera e Safari   |
-| Sistemas Operacionais     | Windows, Ubuntu, Mac, Android e IOS    |
+| Sistemas Operacionais     | Windows, Ubuntu e Android    |
 
 Tecnologias
 
 | Tecnologias   | Descrição |
 |---------------|-----------|
-| Linguagem de programação | ASP.NET |
-| Framework Web  | Bootstrap  |
+| Linguagem de programação | C# |
+| Framework Web  | ASP.NET e Bootstrap  |
 | IDE    | Microsoft Visual Studio     |
 | Design Pattern    | MVC   |
-| Servidor  | ISS    |
+| Servidor  | IIS    |
 
 ## Procedimento e alteração de configuração do ambiente
 Descrever o processo de implantação. (Não entendi muito bem o que vai aqui).
@@ -81,4 +83,4 @@ Descrever o processo de implantação. (Não entendi muito bem o que vai aqui).
 | 3 | Tabelas de iteração   | Apresentar ao usuário cada tabela de iteração após a realização dos cálculos  | Concluído |  
 | 4 | Soluções indeterminas    | Limitar a quantidade de iterações a fim de evitar loops infinitos     | Concluído     |  
 | 5 | Análise de sensibilidade     | Apresentar ao usuário o Preço Sombra e o Limite de Restrições     | Concluído     |  
-| 6 | Download em .pdf     | Disponibilizar botão pra download da solução em pdf     | Concluído     |  
+| 6 | Gerar .pdf     | Disponibilizar solução em .pdf     | Concluído     |  
