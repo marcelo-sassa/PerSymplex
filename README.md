@@ -72,7 +72,6 @@ Tecnologias
 | Servidor  | IIS    |
 
 ## Procedimento e alteração de configuração do ambiente
-Descrever o processo de implantação. (Não entendi muito bem o que vai aqui).
 Para alteração no ambiente é necessário possuir o Git e o Microsoft Visual Studio instalados. Para publicar o projeto, inicialmente é necessário clonar a aplicação que está no Git para o Microsoft Visual Studio e realizar as mudanças no projeto. A partir daí é preciso efetuar o login no Microsoft Azure e publicar a aplicação a partir do Microsoft Visual Studio. Após o projeto modificado, é necessario atualizar a aplicação no Git.
 
 ## Atividades realizadas no período
