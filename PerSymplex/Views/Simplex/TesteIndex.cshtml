@@ -31,7 +31,6 @@
     <![endif]-->
 </head>*@
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
     @*<!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -132,39 +131,6 @@
             </div>
         </div>
     </section>
-    @*<section id="simplex">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Simplex</h1>
-                </div>
-            </div>
-            @if (ViewData["RenderPage"].ToString() == "Index")
-            {
-                <div class="row">
-                    <div class="col-lg-12">
-                        @RenderPage("~/Views/Simplex/Index.cshtml")
-                    </div>
-                </div>
-            }
-            else if(ViewData["RenderPage"].ToString() == "Resultado")
-            {
-                <div class="row">
-                    <div class="col-lg-12">
-                        @RenderPage("~/Views/Simplex/Resultado.cshtml")
-                    </div>
-                </div>
-            }
-            else if (ViewData["RenderPage"].ToString() == "Erro")
-            {
-                <div class="row">
-                    <div class="col-lg-12">
-                        @RenderPage("~/Views/Simplex/Erro.cshtml")
-                    </div>
-                </div>
-            }
-        </div>
-    </section>*@
         <!-- Equipe -->
         <section id="equipe">
             <div class="container">
@@ -179,28 +145,40 @@
                             <img src="https://scontent.fcpq1-1.fna.fbcdn.net/v/t1.0-9/18157798_1491942677523331_1279617802480415518_n.jpg?oh=a50eba451efe3897b564e75c80dc56a6&oe=59E16FE8" class="img-circle foto">
                             <h4>Claudio Junior</h4>
                             <div class="col-xs-4 icone">
-                                <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                <a href="https://www.facebook.com/claudio.junior.927" target="_blank">
+                                    <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                <a href="https://www.linkedin.com/in/claudio-junior-773014132/" target="_blank">
+                                    <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://icons.iconarchive.com/icons/martz90/circle/512/google-plus-icon.png"/>
+                                <a href="https://github.com/IndioMaroto" target="_blank">
+                                    <img src="http://kaelin.io/static/images/github.png" />
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6 membro">
-                        <div >
+                        <div>
                             <img src="https://scontent.fcpq1-1.fna.fbcdn.net/v/t1.0-9/942543_787664894692387_9104833141276113525_n.jpg?oh=d9a28e509ed9b95722e64403b058b6f1&oe=59A0DB52" class="img-circle foto">
                             <h4>Marcelo Sassá</h4>
                             <div class="col-xs-4 icone">
-                                <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                <a href="https://www.facebook.com/marceloguilherme.sassa" target="_blank">
+                                    <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                <a href="https://www.linkedin.com/in/marcelo-guilherme-sass%C3%A1-3933a0132/" target="_blank">
+                                    <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://icons.iconarchive.com/icons/martz90/circle/512/google-plus-icon.png" />
+                                <a href="https://github.com/marcelo-sassa" target="_blank">
+                                    <img src="http://kaelin.io/static/images/github.png" />
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -209,13 +187,19 @@
                             <img src="https://scontent.fcpq1-1.fna.fbcdn.net/v/t1.0-9/10486188_826087877422346_7885918566536450200_n.jpg?oh=2134e037fc1f9d60a7a934a255ad163a&oe=59E644D1" class="img-circle foto">
                             <h4>Marcus Vinícius</h4>
                             <div class="col-xs-4 icone">
-                                <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                <a href="https://www.facebook.com/marcusvinicius.oliveira.587" target="_blank">
+                                    <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                <a href="https://www.linkedin.com/in/marcus-vinicius-oliveira-00777034/" target="_blank">
+                                    <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://icons.iconarchive.com/icons/martz90/circle/512/google-plus-icon.png" />
+                                <a href="https://github.com/MarcusOliveira767" target="_blank">
+                                    <img src="http://kaelin.io/static/images/github.png" />
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -224,25 +208,27 @@
                             <img src="https://scontent.fcpq1-1.fna.fbcdn.net/v/t1.0-9/17904177_10206641535397181_2379530209313103705_n.jpg?oh=82c58febab8127d78d11e853e854c90c&oe=59D35715" class="img-circle foto">
                             <h4>Willy Souza</h4>
                             <div class="col-xs-4 icone">
-                                <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                <a href="https://www.facebook.com/w1llysouza" target="_blank">
+                                    <img src="http://news.clal.it/wp-content/themes/responsive-childtheme-master/core/icons/facebook-icon.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                <a href="https://www.linkedin.com/in/willy-souza-70625711b/" target="_blank">
+                                    <img src="http://socialmediakart.com/wp-content/uploads/2016/09/linkedin.png" />
+                                </a>
                             </div>
                             <div class="col-xs-4 icone">
-                                <img src="http://icons.iconarchive.com/icons/martz90/circle/512/google-plus-icon.png" />
+                                <a href="https://github.com/WillySouza" target="_blank">
+                                    <img src="http://kaelin.io/static/images/github.png" />
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <div class="row">
-            <div class="col-xs-12">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4391.995460271214!2d-49.970444446878915!3d-22.231986764143766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94bfd7386e42f611%3A0x18636cf8fd387b35!2sCentro+Universit%C3%A1rio+Eur%C3%ADpides+de+Mar%C3%ADlia!5e0!3m2!1spt-BR!2sbr!4v1497233274434" width="100%" height="500" frameborder="0" style="border:0" allowfullscreen></iframe>
-            </div>
-        </div>
-        <!-- Rodapé -->
+
+<!-- Rodapé -->
         <footer class="">
             <div class="container">
                 <div class="row">
@@ -261,7 +247,6 @@
         <!-- Scrolling Nav JavaScript -->
         <script src="js/jquery.easing.min.js"></script>
         <script src="js/scrolling-nav.js"></script>*@
-</body>
 <script type="text/javascript">
     window.onload = function () {
         var teste = '@ViewData["PosicionaPagina"]';

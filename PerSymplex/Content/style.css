@@ -3,7 +3,6 @@
 body{
     font-family: 'Raleway', sans-serif;
     overflow-x: hidden;
-    width: 100%;
 }
 section{
     margin-bottom: -1px;
@@ -20,6 +19,13 @@ section p{
 h1, h5{
     font-weight: bold;
 }
+
+@media(max-width: 768px){
+    .container{
+        width: initial;
+    }
+}
+
 
 /*----------MENU----------*/
 .cabecalho{
@@ -116,7 +122,7 @@ footer{
 
 /*----------FUNÇÃO----------*/
 .inicio-simplex{
-    margin-top: 30px;
+    padding-top: 130px;
     text-align: center;
 }
 .calcular{
